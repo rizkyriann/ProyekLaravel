@@ -21,14 +21,11 @@ class EmployeeRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|max:255|unique:users,email',
             'nama_lengkap' => 'required|string|max:255',
             'alamat' => 'nullable|string|max:500',
             'no_telp' => 'required|string|max:20',
             'pendidikan_terakhir' => 'nullable|string|max:100',
             'jabatan' => 'nullable|string|max:100',
-            'status' => 'required|boolean',
             'photo' => 'required|image|mimes:jpeg,png,jpg|max:2048', // max 2MB
             'ktp_document' => 'required|file|mimes:pdf,jpeg,png,jpg|max:5120', // max 5MB
         ];
@@ -50,13 +47,8 @@ class EmployeeRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'name.required' => 'Nama wajib diisi.',
-            'email.required' => 'Email wajib diisi.',
-            'email.email' => 'Format email tidak valid.',
-            'email.unique' => 'Email sudah terdaftar.',
             'nama_lengkap.required' => 'Wajib isi nama lengkap.',
             'no_telp.required' => 'Wajib isi nomor telepon aktif.',
-            'status.required' => 'Status wajib dipilih.',
             'photo.required' => 'Foto wajib diunggah.',
             'photo.image' => 'File foto harus berupa gambar.',
             'photo.mimes' => 'Foto harus berekstensi jpeg, jpg, atau png.',
