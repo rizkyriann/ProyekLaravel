@@ -47,6 +47,7 @@ class RegisterController extends Controller
         // Buat profil employee
         $user->employee()->create([
             'nama_lengkap' => $employeeData['nama_lengkap'],
+            'jenis_kelamin' => $employeeData['jenis_kelamin'],
             'alamat' => $employeeData['alamat'] ?? null,
             'no_telp' => $employeeData['no_telp'],
             'pendidikan_terakhir' => $employeeData['pendidikan_terakhir'],

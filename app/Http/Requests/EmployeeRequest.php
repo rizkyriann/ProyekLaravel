@@ -22,6 +22,7 @@ class EmployeeRequest extends FormRequest
     {
         $rules = [
             'nama_lengkap' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
             'alamat' => 'nullable|string|max:500',
             'no_telp' => 'required|string|max:20',
             'pendidikan_terakhir' => 'nullable|string|max:100',
@@ -48,6 +49,7 @@ class EmployeeRequest extends FormRequest
     {
         return [
             'nama_lengkap.required' => 'Wajib isi nama lengkap.',
+            'jenis_kelamin,required' => 'Wajib pilih jenis kelamin.',
             'no_telp.required' => 'Wajib isi nomor telepon aktif.',
             'photo.required' => 'Foto wajib diunggah.',
             'photo.image' => 'File foto harus berupa gambar.',
