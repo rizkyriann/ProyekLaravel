@@ -41,6 +41,14 @@ class AuthController extends Controller
         return back()->withErrors([
             'email' => 'Email atau password salah, atau akun tidak aktif.',
         ])->withInput();
+
+        $user = Auth::user();
+             if (!$user->status) {
+                Auth::logout();
+                return back()->withErrors([
+                    'email' => 'Akun Anda tidak aktif. Silakan hubungi administrator.',
+                ])->withInput();
+            }
     }
 
     /**
