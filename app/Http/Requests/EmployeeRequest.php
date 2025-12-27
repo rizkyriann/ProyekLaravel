@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class EmployeeRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class EmployeeRequest extends FormRequest
     public function authorize(): bool
     {
         // Hanya user yang login dan role admin/superadmin yang boleh
-        return auth()->check() && in_array(auth()->user()->role, ['superadmin', 'admin']);
+        return Auth::check() && in_array(Auth::user()->role, ['superadmin', 'admin']);
     }
 
     /**

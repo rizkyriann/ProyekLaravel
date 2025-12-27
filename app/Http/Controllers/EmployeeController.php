@@ -118,6 +118,11 @@ class EmployeeController extends Controller
             'role'     => 'required|in:superadmin,admin,karyawan',
             'status'   => 'required|boolean',
 
+            'nama_lengkap' => 'required|string|max:255',
+            'jenis_kelamin' => 'required|in:Laki-Laki,Perempuan',
+            'alamat'       => 'nullable|string|max:500',
+            'no_telp'      => 'required|string|max:20',
+            'pendidikan_terakhir' => 'nullable|string|max:100',
             'jabatan'      => 'required|string|max:255',
             'photo'        => 'nullable|image|max:2048',
             'ktp_document' => 'nullable|file|mimes:jpg,jpeg,png,pdf|max:2048',
@@ -152,6 +157,11 @@ class EmployeeController extends Controller
 
             // update employee
             $employee->update([
+                'nama_lengkap' => $request->nama_lengkap,
+                'jenis_kelamin' => $request->jenis_kelamin,
+                'alamat'       => $request->alamat,
+                'no_telp'      => $request->no_telp,
+                'pendidikan_terakhir' => $request->pendidikan_terakhir,
                 'jabatan'      => $request->jabatan,
                 'photo'        => $employee->photo,
                 'ktp_document' => $employee->ktp_document,

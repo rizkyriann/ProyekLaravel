@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\Auth;
 
 class RegisterRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class RegisterRequest extends FormRequest
     public function authorize(): bool
     {
         // Hanya admin/superadmin yang boleh membuat user
-        return auth()->check() && in_array(auth()->user()->role, ['superadmin', 'admin']);
+        return Auth::check() && in_array(Auth::user()->role, ['superadmin', 'admin']);
     }
 
     /**

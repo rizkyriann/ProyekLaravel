@@ -23,8 +23,8 @@ class EmployeeSeeder extends Seeder
                 'no_telp'       => '081234567890',
                 'pendidikan_terakhir' => 'S1 Teknik Informatika',
                 'jabatan'       => 'Direktur',
-                'photo'         => null,
-                'ktp_document'  => null,
+                'photo'         => 'dummy/photo.jpg',
+                'ktp_document'  => 'dummy/ktpphoto.jpg',
             ]);
         }
 
@@ -32,8 +32,13 @@ class EmployeeSeeder extends Seeder
             Employee::create([
                 'user_id'       => $admin->id,
                 'jabatan'       => 'Admin Proyek',
-                'photo'         => null,
-                'ktp_document'  => null,
+                'jenis_kelamin' => 'Perempuan',
+                'nama_lengkap'  => 'Admin User',
+                'alamat'        => 'Jl. Sudirman No.10',
+                'no_telp'       => '089876543210',
+                'pendidikan_terakhir' => 'S1 Manajemen',
+                'photo'         => 'dummy/photo.jpg',
+                'ktp_document'  => 'dummy/ktpphoto.jpg',
             ]);
         }
 
@@ -41,8 +46,13 @@ class EmployeeSeeder extends Seeder
             Employee::create([
                 'user_id'       => $karyawan->id,
                 'jabatan'       => 'Karyawan Lapangan',
-                'photo'         => null,
-                'ktp_document'  => null,
+                'jenis_kelamin' => 'Laki-Laki',
+                'nama_lengkap'  => 'Karyawan Lapangan',
+                'alamat'        => 'Jl. Karyawan No.1',
+                'no_telp'       => '081234567890',
+                'pendidikan_terakhir' => 'S1 Teknik Informatika',
+                'photo'         => 'dummy/photo.jpg',
+                'ktp_document'  => 'dummy/ktpphoto.jpg',
             ]);
         }
     }

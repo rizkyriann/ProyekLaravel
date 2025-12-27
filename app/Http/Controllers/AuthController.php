@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Http\Requests\LoginRequest;
 
 class AuthController extends Controller
 {
@@ -19,37 +18,35 @@ class AuthController extends Controller
     /**
      * Proses login.
      */
-    public function login(LoginRequest $request)
+    public function login(Request $request)
     {
-        $credentials = $request->validated();
+        $credentials = $request->validated([
+            'email' => 'required|email',
+            'password' => 'required|string',
+        ]);
 
-        // Cek login
-        if (Auth::attempt(['email' => $credentials['email'], 'password' => $credentials['password'], 'status' => 1])) {
-            $request->session()->regenerate();
-
-            // Redirect berdasarkan role
-            $user = Auth::user();
-            if ($user->isSuperAdmin()) {
-                return redirect()->route('dashboard.superadmin');
-            } elseif ($user->isAdmin()) {
-                return redirect()->route('dashboard.admin');
-            } else {
-                return redirect()->route('dashboard.karyawan');
-            }
+        if (!Auth::attempt([
+            'email' => $credentials['email'],
+            'password' => $credentials['password'],
+            'status' => 1,
+        ])) {
+            return back()->withErrors([
+                'email' => 'Email atau password salah, atau akun tidak aktif.',
+            ])->withInput();
         }
 
-        return back()->withErrors([
-            'email' => 'Email atau password salah, atau akun tidak aktif.',
-        ])->withInput();
+        $request->session()->regenerate();
 
         $user = Auth::user();
-             if (!$user->status) {
-                Auth::logout();
-                return back()->withErrors([
-                    'email' => 'Akun Anda tidak aktif. Silakan hubungi administrator.',
-                ])->withInput();
-            }
+
+        return match ($user->role) {
+            'superadmin' => redirect()->route('superadmin.dashboard'),
+            'admin'      => redirect()->route('admin.dashboard'),
+            'karyawan'   => redirect()->route('karyawan.dashboard'),
+            default      => abort(403),
+        };
     }
+
 
     /**
      * Proses logout.

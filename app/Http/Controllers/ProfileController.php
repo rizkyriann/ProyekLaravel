@@ -13,7 +13,8 @@ class ProfileController extends Controller
      */
     public function show()
     {
-        $user = Auth::user()->load('employee'); // load relasi employee
+        $user = Auth::user();
+        $user->load('employee'); // load relasi employee
         return view('profile.show', compact('user'));
     }
 
