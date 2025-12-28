@@ -12,7 +12,7 @@ class AuthController extends Controller
      */
     public function showLogin()
     {
-        return view('auth.login'); // pastikan ada resources/views/auth/login.blade.php
+        return view('pages.auth.signin'); // pastikan ada resources/views/auth/login.blade.php
     }
 
     /**

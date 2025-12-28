@@ -4,18 +4,13 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\EmployeeController;
+
 
 //Login dan logout, tanpa middleware
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
-
-//Form Register (admin dan superadmin))
-Route::middleware(['auth', 'role:admin,superadmin'])->group(function () {
-    Route::get('/register', [RegisterController::class, 'create'])->name('register');
-    Route::post('/register', [RegisterController::class, 'store']);
-});
-
 
 //Redirect dashboard berdasarkan role
 Route::get('/dashboard', function () {
