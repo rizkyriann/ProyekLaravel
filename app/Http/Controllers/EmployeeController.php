@@ -17,7 +17,7 @@ class EmployeeController extends Controller
     public function index()
     {
         $employees = Employee::with('user')->latest()->get();
-        return view('employees.index', compact('employees'));
+        return view('pages.employees.index', compact('employees'));
     }
 
     /**
@@ -25,7 +25,7 @@ class EmployeeController extends Controller
      */
     public function create()
     {
-        return view('employees.create');
+        return view('pages.employees.create');
     }
 
     /**
@@ -95,7 +95,7 @@ class EmployeeController extends Controller
     public function show(Employee $employee)
     {
         $employee->load('user');
-        return view('employees.show', compact('employee'));
+        return view('pages.employees.show', compact('employee'));
     }
 
     /**
@@ -104,7 +104,7 @@ class EmployeeController extends Controller
     public function edit(Employee $employee)
     {
         $employee->load('user');
-        return view('employees.edit', compact('employee'));
+        return view('pages.employees.edit', compact('employee'));
     }
 
     /**
@@ -162,6 +162,7 @@ class EmployeeController extends Controller
                 'alamat'       => $request->alamat,
                 'no_telp'      => $request->no_telp,
                 'pendidikan_terakhir' => $request->pendidikan_terakhir,
+
                 'jabatan'      => $request->jabatan,
                 'photo'        => $employee->photo,
                 'ktp_document' => $employee->ktp_document,

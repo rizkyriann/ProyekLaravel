@@ -50,7 +50,10 @@ Route::middleware(['auth', 'role:admin,superadmin'])
             return view('pages.dashboard.admin.index');
         })->name('dashboard');
 
-        // CRUD karyawan (nanti)
+        //Manajemen Karyawan
+        Route::resource('employees', EmployeeController::class);
+        Route::post('employees/{employee}/deactivate', [EmployeeController::class, 'deactivate'])->name('employees.deactivate');
+        Route::post('employees/{employee}/activate', [EmployeeController::class, 'activate'])->name('employees.activate');
     });
 
 
