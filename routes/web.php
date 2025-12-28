@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
@@ -14,7 +15,7 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
 
 //Redirect dashboard berdasarkan role
 Route::get('/dashboard', function () {
-    $role = auth()->user()->role;
+    $role = Auth::user()->role;
 
     return match ($role) {
         'superadmin' => redirect()->route('superadmin.dashboard'),
@@ -32,7 +33,7 @@ Route::middleware(['auth', 'role:superadmin'])
     ->group(function () {
 
         Route::get('/dashboard', function () {
-            return view('dashboard.superadmin');
+            return view('pages.dashboard.superadmin.index');
         })->name('dashboard');
 
         // user & employee management (nanti)
@@ -46,7 +47,7 @@ Route::middleware(['auth', 'role:admin,superadmin'])
     ->group(function () {
 
         Route::get('/dashboard', function () {
-            return view('dashboard.admin');
+            return view('pages.dashboard.admin.index');
         })->name('dashboard');
 
         // CRUD karyawan (nanti)
@@ -60,7 +61,7 @@ Route::middleware(['auth', 'role:karyawan'])
     ->group(function () {
 
         Route::get('/dashboard', function () {
-            return view('dashboard.karyawan');
+            return view('pages.dashboard.karyawan.index');
         })->name('dashboard');
     });
 
