@@ -84,19 +84,13 @@
                         <!-- Status Badge -->
                         <td class="px-5 py-4 sm:px-6">
                             @if($employee->user->status)
-                                <span
-                                    @click="openConfirm({{ $employee->user->id }}, false)"
-                                    class="cursor-pointer inline-flex rounded-full bg-green-50 px-2 py-0.5 text-theme-xs font-medium text-green-700
-                                           dark:bg-green-500/15 dark:text-green-500"
-                                >
+                                <span class="inline-flex rounded-full bg-green-50 px-2 py-0.5 text-theme-xs font-medium text-green-700
+                                           dark:bg-green-500/15 dark:text-green-500">
                                     Aktif
                                 </span>
                             @else
-                                <span
-                                    @click="openConfirm({{ $employee->user->id }}, true)"
-                                    class="cursor-pointer inline-flex rounded-full bg-red-50 px-2 py-0.5 text-theme-xs font-medium text-red-700
-                                           dark:bg-red-500/15 dark:text-red-500"
-                                >
+                                <span class="inline-flex rounded-full bg-red-50 px-2 py-0.5 text-theme-xs font-medium text-red-700
+                                           dark:bg-red-500/15 dark:text-red-500">
                                     Nonaktif
                                 </span>
                             @endif
