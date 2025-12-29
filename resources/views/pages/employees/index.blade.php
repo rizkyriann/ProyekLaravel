@@ -21,9 +21,13 @@
             Data Karyawan
         </h2>
 
-        <a href="{{ route('admin.employees.create') }}"
-           class="inline-flex items-center justify-center rounded-md bg-primary px-6 py-2.5 text-sm font-medium text-white hover:bg-primary/90">
-            Tambah Karyawan
+        <a href="{{ route('admin.employees.create') }}">
+            <x-ui.button
+                size="md"
+                variant="primary"
+                >
+                Tambah Karyawan
+            </x-ui.button>
         </a>
     </div>
 
