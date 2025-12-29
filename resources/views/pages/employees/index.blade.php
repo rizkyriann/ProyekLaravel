@@ -48,7 +48,7 @@
                         <th class="px-5 py-3 text-left sm:px-6">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Status</p>
                         </th>
-                        <th class="px-5 py-3 text-center sm:px-6">
+                        <th class="px-5 py-3 text-center sm:px-6 w-[140px]">
                             <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">Aksi</p>
                         </th>
                     </tr>
@@ -97,16 +97,24 @@
                         </td>
 
                         <td class="px-5 py-4 sm:px-6">
-                            <div class="flex items-center gap-2">
+                            <div class="flex items-center gap-3 justify-center">
                                 <a href="{{ route('admin.employees.show', $employee) }}"
-                                class="inline-flex rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                    Detail
+                                class="inline-flex items-center justify-center rounded-md bg-primary p-2
+                                        text-gray-800 hover:bg-primary/90 dark:text-white/90">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                        <path fill-rule="evenodd" d="M4.5 3.75a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V6.75a3 3 0 0 0-3-3h-15Zm4.125 3a2.25 2.25 0 1 0 0 4.5 2.25 2.25 0 0 0 0-4.5Zm-3.873 8.703a4.126 4.126 0 0 1 7.746 0 .75.75 0 0 1-.351.92 7.47 7.47 0 0 1-3.522.877 7.47 7.47 0 0 1-3.522-.877.75.75 0 0 1-.351-.92ZM15 8.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15ZM14.25 12a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H15a.75.75 0 0 1-.75-.75Zm.75 2.25a.75.75 0 0 0 0 1.5h3.75a.75.75 0 0 0 0-1.5H15Z" clip-rule="evenodd" />
+                                    </svg>
                                 </a>
 
                                 <a href="{{ route('admin.employees.edit', $employee) }}"
-                                class="inline-flex rounded-md bg-primary px-3 py-1.5 text-xs font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                    Edit
+                                class="inline-flex items-center justify-center rounded-md bg-primary p-2
+                                        text-gray-800 hover:bg-primary/90 dark:text-white/90">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+                                         <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+                                         <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+                                    </svg>
                                 </a>
+                            
                             </div>
                         </td>
                     </tr>
