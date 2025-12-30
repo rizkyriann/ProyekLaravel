@@ -43,7 +43,7 @@ class MenuHelper
                     [
                         'name'  => 'Manajemen User',
                         'icon'  => 'users',
-                        'path'  => '/users',
+                        'path'  => '/admin/employees',
                         'roles' => ['superadmin'],
                     ],
                     [

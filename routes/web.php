@@ -36,7 +36,6 @@ Route::middleware(['auth', 'role:superadmin'])
             return view('pages.dashboard.superadmin.index');
         })->name('dashboard');
 
-        // user & employee management (nanti)
     });
 
 

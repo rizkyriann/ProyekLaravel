@@ -22,6 +22,11 @@ class RoleMiddleware
             return redirect()->route('login');
         }
 
+        // di middleware / Gate / Policy
+        if (Auth::user()->role === 'superadmin') {
+            return $next($request);
+        }
+
         $user = Auth::user();
 
         // Cek apakah role user ada di daftar role yang diperbolehkan
