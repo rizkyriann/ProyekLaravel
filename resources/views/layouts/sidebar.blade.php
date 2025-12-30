@@ -64,14 +64,20 @@
         'xl:justify-center' :
         'justify-start'">
         <a href="/">
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="dark:hidden" src="/images/logo/logo.svg" alt="Logo" width="150" height="40" />
-            <img x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="hidden dark:block" src="/images/logo/logo-dark.svg" alt="Logo" width="150"
-                height="40" />
-            <img x-show="!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen"
-                src="/images/logo/logo-icon.svg" alt="Logo" width="32" height="32" />
-
+            <div
+                x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
+                class="flex items-center gap-2 dark:text-white"
+>
+                <!-- SVG Logo -->
+                <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  
+                    fill="currentColor" viewBox="0 0 24 24" >
+                    <path d="M11 6h2v2h-2zM15 6h2v2h-2zM15 10.03h2V12h-2zM15 14h2v2h-2zM7 15h2v2H7z"></path><path d="M3 16v5c0 .55.45 1 1 1h16c.55 0 1-.45 1-1V4c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v5.59L2.29 14.3c-.29.29-.37.72-.22 1.09s.52.62.92.62Zm8 4H5v-5.59l3-3 3 3zm8-16v16h-6v-4a1.002 1.002 0 0 0 .7-1.71L8.99 9.58V3.99h10Z"></path>
+                </svg>
+                <!-- Text Logo -->
+                <span class="text-2xl font-extrabold tracking-wide">
+                    Admin<span class="text-primary">Proyek</span>
+                </span>
+            </div>
         </a>
     </div>
 
