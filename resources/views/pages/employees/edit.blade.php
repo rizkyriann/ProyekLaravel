@@ -3,7 +3,8 @@
 @section('content')
 <div class="mx-auto max-w-screen-md p-4 md:p-6 2xl:p-10">
 
-    <h2 class="mb-6 text-title-md2 font-semibold text-black dark:text-white">
+    {{-- HEADER --}}
+    <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
         Edit Karyawan
     </h2>
 
@@ -11,28 +12,53 @@
         @csrf
         @method('PUT')
 
-        <div class="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div class="p-6 space-y-6">
+        <div class="overflow-hidden rounded-xl border border-gray-200 bg-white
+                    shadow-default dark:border-gray-800 dark:bg-white/[0.03]">
 
-                <!-- USER -->
+            <div class="space-y-6 p-6">
+
+                {{-- USER --}}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                        <label class="mb-2 block text-sm font-medium text-black dark:text-white">
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
                             Nama User
                         </label>
                         <input type="text" name="name" value="{{ $employee->user->name }}"
-                               class="w-full rounded border border-stroke px-4 py-2 focus:border-primary focus:outline-none dark:border-strokedark">
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Email</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Email
+                        </label>
                         <input type="email" name="email" value="{{ $employee->user->email }}"
-                               class="w-full rounded border border-stroke px-4 py-2">
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Role</label>
-                        <select name="role" class="w-full rounded border border-stroke px-4 py-2">
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Role
+                        </label>
+                        <select name="role"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                             <option value="superadmin" @selected($employee->user->role=='superadmin')>Superadmin</option>
                             <option value="admin" @selected($employee->user->role=='admin')>Admin</option>
                             <option value="karyawan" @selected($employee->user->role=='karyawan')>Karyawan</option>
@@ -40,93 +66,168 @@
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Status Akun</label>
-                        <select name="status" class="w-full rounded border border-stroke px-4 py-2">
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Status Akun
+                        </label>
+                        <select name="status"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                             <option value="1" @selected($employee->user->status)>Aktif</option>
                             <option value="0" @selected(!$employee->user->status)>Nonaktif</option>
                         </select>
                     </div>
                 </div>
 
-                <hr class="border-stroke dark:border-strokedark">
+                <hr class="border-gray-200 dark:border-gray-800">
 
-                <!-- EMPLOYEE -->
+                {{-- EMPLOYEE --}}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Nama Lengkap</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Nama Lengkap
+                        </label>
                         <input type="text" name="nama_lengkap" value="{{ $employee->nama_lengkap }}"
-                               class="w-full rounded border border-stroke px-4 py-2">
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Jabatan</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Jabatan
+                        </label>
                         <input type="text" name="jabatan" value="{{ $employee->jabatan }}"
-                               class="w-full rounded border border-stroke px-4 py-2">
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Jenis Kelamin</label>
-                        <select name="jenis_kelamin" class="w-full rounded border border-stroke px-4 py-2">
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Jenis Kelamin
+                        </label>
+                        <select name="jenis_kelamin"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                             <option value="Laki-Laki" @selected($employee->jenis_kelamin=='Laki-Laki')>Laki-Laki</option>
                             <option value="Perempuan" @selected($employee->jenis_kelamin=='Perempuan')>Perempuan</option>
                         </select>
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">No Telp</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            No Telp
+                        </label>
                         <input type="text" name="no_telp" value="{{ $employee->no_telp }}"
-                               class="w-full rounded border border-stroke px-4 py-2">
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Pendidikan Terakhir</label>
-                        <input type="text" name="pendidikan_terakhir"
-                               value="{{ $employee->pendidikan_terakhir }}"
-                               class="w-full rounded border border-stroke px-4 py-2">
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Pendidikan Terakhir
+                        </label>
+                        <input type="text" name="pendidikan_terakhir" value="{{ $employee->pendidikan_terakhir }}"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
                     </div>
                 </div>
 
+                {{-- ALAMAT --}}
                 <div>
-                    <label class="mb-2 block text-sm font-medium">Alamat</label>
+                    <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                        Alamat
+                    </label>
                     <textarea name="alamat" rows="3"
-                              class="w-full rounded border border-stroke px-4 py-2">{{ $employee->alamat }}</textarea>
+                        class="w-full rounded-md border
+                               border-gray-300 dark:border-gray-700
+                               bg-transparent dark:bg-gray-900
+                               px-4 py-2 text-sm
+                               text-gray-800 dark:text-white
+                               focus:border-primary focus:outline-none
+                               dark:focus:border-primary">{{ $employee->alamat }}</textarea>
                 </div>
 
-                <!-- FILE -->
+                {{-- FILE --}}
                 <div class="grid grid-cols-1 gap-6 md:grid-cols-2">
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Foto</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Foto
+                        </label>
                         @if($employee->photo)
                             <img src="{{ asset('storage/'.$employee->photo) }}"
-                                 class="mb-2 h-24 rounded">
+                                 class="mb-2 h-24 rounded-md object-cover ring-1 ring-gray-200 dark:ring-gray-700">
                         @endif
-                        <input type="file" name="photo" class="w-full">
+                        <input type="file" name="photo"
+                               class="w-full text-sm text-gray-700 dark:text-gray-300">
                     </div>
 
                     <div>
-                        <label class="mb-2 block text-sm font-medium">Dokumen KTP</label>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Dokumen KTP
+                        </label>
                         @if($employee->ktp_document)
                             <a href="{{ asset('storage/'.$employee->ktp_document) }}"
-                               class="mb-2 inline-block text-primary underline" target="_blank">
+                               target="_blank"
+                               class="mb-2 inline-block text-sm font-medium text-primary underline">
                                 Lihat Dokumen
                             </a>
                         @endif
-                        <input type="file" name="ktp_document" class="w-full">
+                        <input type="file" name="ktp_document"
+                               class="w-full text-sm text-gray-700 dark:text-gray-300">
                     </div>
                 </div>
 
             </div>
 
-            <div class="flex justify-end gap-3 border-t border-stroke p-6 dark:border-strokedark">
+            {{-- ACTION --}}
+            <div class="flex justify-end gap-3 border-t border-gray-200 p-6 dark:border-gray-800">
                 <a href="{{ route('admin.employees.index') }}"
-                   class="rounded-md border border-stroke px-6 py-2 text-sm font-medium">
+                   class="inline-flex h-10 items-center justify-center
+                          rounded-md border border-gray-300 dark:border-gray-700
+                          px-6 text-sm font-medium
+                          text-gray-700 dark:text-white
+                          hover:bg-gray-100 dark:hover:bg-gray-800">
                     Kembali
                 </a>
+
                 <button type="submit"
-                        class="rounded-md bg-primary px-6 py-2 text-sm font-medium text-white hover:bg-opacity-90">
+                    class="inline-flex h-10 items-center justify-center
+                           rounded-md bg-primary px-6
+                           text-sm font-medium text-white
+                           hover:bg-opacity-90">
                     Update
                 </button>
             </div>
+
         </div>
     </form>
 </div>
