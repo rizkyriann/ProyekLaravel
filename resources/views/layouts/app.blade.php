@@ -11,9 +11,6 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Alpine.js -->
-    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
-
     <!-- Theme Store -->
     <script>
         document.addEventListener('alpine:init', () => {
@@ -130,6 +127,28 @@
         </div>
 
     </div>
+
+    @if (session('success'))
+    <div 
+     x-data="{ show: true }"
+        x-init="setTimeout(() => show = false, 3000)"
+        x-show="show"
+        x-transition
+        class="fixed right-5 top-5 z-50 flex items-center gap-3
+           rounded-lg bg-green-600 px-5 py-3 text-white shadow-lg"
+>
+    <!-- icon -->
+    <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+    </svg>
+
+    <span class="text-sm font-medium">
+        {{ session('success') }}
+    </span>
+    
+    </div>
+    @endif
 
 </body>
 

@@ -197,7 +197,7 @@
                         @if($employee->ktp_document)
                             <a href="{{ asset('storage/'.$employee->ktp_document) }}"
                                target="_blank"
-                               class="mb-2 inline-block text-sm font-medium text-primary underline">
+                               class="mb-2 inline-block text-sm font-medium text-primary underline dark:text-white">
                                 Lihat Dokumen
                             </a>
                         @endif
@@ -219,13 +219,12 @@
                     Kembali
                 </a>
 
-                <button type="submit"
-                    class="inline-flex h-10 items-center justify-center
-                           rounded-md bg-primary px-6
-                           text-sm font-medium text-white
-                           hover:bg-opacity-90">
-                    Update
-                </button>
+                <x-ui.button
+                    class="h-10 px-6 text-sm font-medium"
+                    variant="primary"
+                    type="submit">
+                    Simpan
+                </x-ui.button>
             </div>
 
         </div>

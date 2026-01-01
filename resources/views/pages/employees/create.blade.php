@@ -35,12 +35,57 @@
                                    dark:focus:border-primary">
                     </div>
 
+                    {{-- Nama Lengkap --}}
+                    <div>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Nama Lengkap
+                        </label>
+                        <input type="text" name="nama_lengkap"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
+                    </div>
+
                     {{-- Email --}}
                     <div>
                         <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
                             Email
                         </label>
                         <input type="email" name="email"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
+                    </div>
+
+                    {{-- No Telepon --}}
+                    <div>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            No Telepon
+                        </label>
+                        <input type="text" name="no_telp"
+                            class="w-full rounded-md border
+                                   border-gray-300 dark:border-gray-700
+                                   bg-transparent dark:bg-gray-900
+                                   px-4 py-2 text-sm
+                                   text-gray-800 dark:text-white
+                                   focus:border-primary focus:outline-none
+                                   dark:focus:border-primary">
+                    </div>
+
+                    {{-- Pendidikan --}}
+                    <div>
+                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                            Pendidikan Terakhir
+                        </label>
+                        <input type="text" name="pendidikan_terakhir"
                             class="w-full rounded-md border
                                    border-gray-300 dark:border-gray-700
                                    bg-transparent dark:bg-gray-900
@@ -83,21 +128,6 @@
                             <option value="admin">Admin</option>
                             <option value="karyawan">Karyawan</option>
                         </select>
-                    </div>
-
-                    {{-- Nama Lengkap --}}
-                    <div>
-                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
-                            Nama Lengkap
-                        </label>
-                        <input type="text" name="nama_lengkap"
-                            class="w-full rounded-md border
-                                   border-gray-300 dark:border-gray-700
-                                   bg-transparent dark:bg-gray-900
-                                   px-4 py-2 text-sm
-                                   text-gray-800 dark:text-white
-                                   focus:border-primary focus:outline-none
-                                   dark:focus:border-primary">
                     </div>
 
                     {{-- Jabatan --}}
@@ -169,11 +199,20 @@
             {{-- FOOTER ACTION --}}
             <div class="flex justify-end gap-3 border-t border-gray-200 p-6 dark:border-gray-800">
                  <x-ui.button
-                    size="h-10 w-40 px-6 text-sm"
+                    size="h-10 px-6 text-sm"
                     variant="primary"
                     type="submit">
                      Tambah Karyawan
                  </x-ui.button>
+
+                 <a href="{{ route('admin.employees.index') }}"
+                   class="inline-flex h-12 items-center justify-center
+                          rounded-md border border-gray-300 dark:border-gray-700
+                          px-6 text-sm font-medium
+                          text-gray-700 dark:text-white
+                          hover:bg-gray-100 dark:hover:bg-gray-800">
+                    Kembali
+                </a>
             </div>
         </div>
     </form>

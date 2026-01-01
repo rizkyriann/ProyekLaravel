@@ -7,6 +7,10 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 
+Route::get('/', function () {
+    return view('welcome');
+});
+
 
 //Login dan logout, tanpa middleware
 Route::get('/login', [AuthController::class, 'showLogin'])->name('login');

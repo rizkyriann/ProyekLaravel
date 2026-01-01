@@ -4,10 +4,14 @@
     </label>
 
     <label
-        class="flex cursor-pointer items-center gap-3 rounded border border-stroke
-               bg-transparent px-4 py-3 text-sm
-               text-gray-500 hover:border-primary
-               dark:border-strokedark dark:text-gray-400">
+        class="flex cursor-pointer
+                w-full rounded-md border
+                border-gray-300 dark:border-gray-700
+                bg-transparent dark:bg-gray-900
+                px-4 py-2 text-sm
+                text-gray-800 dark:text-white
+                focus:border-primary focus:outline-none
+                dark:focus:border-primary">
 
         <!-- SVG ICON -->
         <svg class="h-5 w-5 fill-current text-primary" viewBox="0 0 24 24">

@@ -33,6 +33,7 @@ class EmployeeController extends Controller
      */
     public function store(Request $request)
     {
+
         $request->validate([
             // user
             'name'     => 'required|string|max:255',
@@ -85,7 +86,7 @@ class EmployeeController extends Controller
             ]);
         });
 
-        return redirect()->route('admin.dashboard')
+        return redirect()->route('admin.employees.index')
             ->with('success', 'Karyawan berhasil ditambahkan');
     }
 
