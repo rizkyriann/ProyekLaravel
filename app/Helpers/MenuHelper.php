@@ -44,7 +44,7 @@ class MenuHelper
                         'name'  => 'Manajemen User',
                         'icon'  => 'users',
                         'path'  => '/admin/employees',
-                        'roles' => ['superadmin'],
+                        'roles' => ['superadmin', 'admin'],
                     ],
                     [
                         'name'  => 'Gudang',

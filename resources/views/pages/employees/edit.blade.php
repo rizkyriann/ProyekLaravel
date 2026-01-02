@@ -186,26 +186,43 @@
                             <img src="{{ asset('storage/'.$employee->photo) }}"
                                  class="mb-2 h-24 rounded-md object-cover ring-1 ring-gray-200 dark:ring-gray-700">
                         @endif
-                        <input type="file" name="photo"
-                               class="w-full text-sm text-gray-700 dark:text-gray-300">
                     </div>
 
-                    <div>
-                        <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
+                    <div x-data="{ fileName: '' }">
+                         <label class="mb-1 block text-theme-xs font-medium text-gray-500 dark:text-gray-400">
                             Dokumen KTP
-                        </label>
+                         </label>
                         @if($employee->ktp_document)
                             <a href="{{ asset('storage/'.$employee->ktp_document) }}"
-                               target="_blank"
-                               class="mb-2 inline-block text-sm font-medium text-primary underline dark:text-white">
-                                Lihat Dokumen
-                            </a>
-                        @endif
-                        <input type="file" name="ktp_document"
-                               class="w-full text-sm text-gray-700 dark:text-gray-300">
-                    </div>
-                </div>
+                                target="_blank"
+                                class="mb-2 inline-block text-sm font-medium text-primary underline dark:text-white">
+                            Lihat Dokumen
+                             </a>
+                         @endif
 
+                         <!-- Custom File Input -->
+                        <label
+                             class="flex cursor-pointer items-center gap-3 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm
+                             text-gray-700 shadow-sm hover:bg-gray-50
+                             dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+
+                            <!-- Button -->
+                                <span class="rounded-md bg-primary px-3 py-1 text-white text-xs font-medium">
+                                     Pilih File
+                                 </span>
+
+                            <!-- Filename -->
+                                 <span class="truncate" x-text="fileName || 'Belum ada file dipilih'"></span>
+
+                            <!-- Hidden Input -->
+                                <input
+                             type="file"
+                             name="ktp_document"
+                             class="hidden"
+                             @change="fileName = $event.target.files[0]?.name"
+                            >
+                        </label>
+                    </div>
             </div>
 
             {{-- ACTION --}}
