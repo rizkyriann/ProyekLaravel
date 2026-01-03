@@ -3,8 +3,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\HandOverItem;
 
-class HandOver extends Model
+class Handover extends Model
 {
     use HasFactory;
 

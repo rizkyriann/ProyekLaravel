@@ -1,17 +1,21 @@
 <?php
+
 namespace App\Http\Controllers;
 
-use App\Models\HandOver;
-use App\Models\HandoverItem;
+use App\Models\Handover;
 use App\Models\Item;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
-class HandOverController extends Controller
+class HandoverController extends Controller
 {
-    // Tampilkan list handover
+    // List handover
     public function index()
     {
-        $handovers = HandOver::with('items')->latest()->get();
+        $handovers = Handover::with('handoverItems')
+            ->latest()
+            ->get();
+
         return view('warehouse.handovers.index', compact('handovers'));
     }
 
@@ -21,55 +25,85 @@ class HandOverController extends Controller
         return view('warehouse.handovers.create');
     }
 
-    // Simpan handover baru
+    // Simpan handover (STOCK IN)
     public function store(Request $request)
     {
-        // Validasi bisa langsung di sini atau pakai FormRequest
-        $handover = HandOver::create($request->all());
+        DB::transaction(function () use ($request) {
 
-        // Simpan Handover Items
-        foreach ($request->items as $itemData) {
-            $handoverItem = $handover->items()->create($itemData);
-
-            // Optional: otomatis masuk ke stok
-            Item::create([
-                'sku' => $itemData['sku'],
-                'name' => $itemData['item_name'],
-                'handover_id' => $handover->id,
-                'quantity' => $itemData['quantity'],
-                'price' => $itemData['price'],
-                'status' => 'active'
+            // 1. SIMPAN HANDOVER (HEADER)
+            $handover = HandOver::create([
+                'handover_no'   => $request->handover_no,
+                'source'        => $request->source, // supplier
+                'handover_date' => $request->handover_date,
+                'status'        => 'completed',
             ]);
-        }
 
-        return redirect()->route('handovers.index')->with('success', 'Handover berhasil dibuat.');
+            // 2. SIMPAN HANDOVER ITEMS + MASUK STOK
+            foreach ($request->items as $itemData) {
+
+                // detail barang masuk (dokumen)
+                $handoverItem = $handover->handoverItems()->create([
+                    'sku'       => $itemData['sku'],
+                    'item_name' => $itemData['item_name'],
+                    'quantity'  => $itemData['quantity'],
+                    'price'     => $itemData['price'],
+                ]);
+
+                // stok gudang (hasil transaksi)
+                Item::create([
+                    'handover_id'       => $handover->id,
+                    'handover_item_id'  => $handoverItem->id,
+                    'sku'               => $itemData['sku'],
+                    'name'              => $itemData['item_name'],
+                    'quantity'          => $itemData['quantity'],
+                    'price'             => $itemData['price'],
+                    'status'            => 'active',
+                ]);
+            }
+        });
+
+        return redirect()
+            ->route('handovers.index')
+            ->with('success', 'Handover berhasil dibuat');
     }
 
-    // Tampilkan detail handover
-    public function show(HandOver $handover)
+    // Detail handover
+    public function show(Handover $handover)
     {
-        $handover->load('items', 'stockItems');
+        $handover->load([
+            'handoverItems',
+            'stockItems'
+        ]);
+
         return view('warehouse.handovers.show', compact('handover'));
     }
 
-    // Form edit handover
-    public function edit(HandOver $handover)
+    // Edit handover (biasanya jarang dipakai)
+    public function edit(Handover $handover)
     {
         return view('warehouse.handovers.edit', compact('handover'));
     }
 
-    // Update handover
-    public function update(Request $request, HandOver $handover)
+    // Update handover (HEADER ONLY)
+    public function update(Request $request, Handover $handover)
     {
-        $handover->update($request->all());
-        // Logika update Handover Items jika diperlukan
-        return redirect()->route('handovers.index')->with('success', 'Handover berhasil diupdate.');
+        $handover->update([
+            'source'        => $request->source,
+            'handover_date' => $request->handover_date,
+        ]);
+
+        return redirect()
+            ->route('handovers.index')
+            ->with('success', 'Handover berhasil diupdate');
     }
 
-    // Hapus handover
-    public function destroy(HandOver $handover)
+    // Hapus handover (soft delete disarankan)
+    public function destroy(Handover $handover)
     {
-        $handover->delete(); // FK dengan cascade → items & handover_items otomatis terhapus
-        return redirect()->route('handovers.index')->with('success', 'Handover berhasil dihapus.');
+        $handover->delete();
+
+        return redirect()
+            ->route('handovers.index')
+            ->with('success', 'Handover berhasil dihapus');
     }
 }
