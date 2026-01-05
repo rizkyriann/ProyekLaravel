@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ItemController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -28,6 +29,18 @@ Route::get('/dashboard', function () {
         default      => abort(403),
     };
 })->middleware('auth');
+
+Route::middleware(['auth', 'role:admin,superadmin'])
+    ->prefix('warehouse')
+    ->name('warehouse.')
+    ->group(function () {
+
+        Route::resource('items', ItemController::class)
+            ->only(['index', 'show']);
+
+        Route::get('items/{item}/stock-card', [ItemController::class, 'stockCard'])
+            ->name('items.stock-card');
+    });
 
 
 //Superadmin Route
