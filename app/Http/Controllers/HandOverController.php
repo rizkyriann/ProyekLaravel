@@ -31,7 +31,7 @@ class HandoverController extends Controller
         DB::transaction(function () use ($request) {
 
             // 1. SIMPAN HANDOVER (HEADER)
-            $handover = HandOver::create([
+            $handover = Handover::create([
                 'handover_no'   => $request->handover_no,
                 'source'        => $request->source, // supplier
                 'handover_date' => $request->handover_date,
