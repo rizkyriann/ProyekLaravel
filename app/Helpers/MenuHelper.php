@@ -71,19 +71,24 @@ class MenuHelper
                         'roles' => ['superadmin', 'admin'],
                     ],
                     [
-                        'name'  => 'Gudang',
+                        'name'  => 'Manajemen Gudang',
                         'icon'  => 'warehouse',
                         'roles' => ['superadmin', 'admin'],
                         'subItems' => [
                             [
-                                'name'  => 'Barang',
-                                'path'  => '/gudang/barang',
+                                'name'  => 'Daftar Handover',
+                                'path'  => '/warehouse/handover',
                                 'roles' => ['superadmin', 'admin'],
                             ],
                             [
-                                'name'  => 'Kategori',
-                                'path'  => '/gudang/kategori',
+                                'name'  => 'Daftar Barang',
+                                'path'  => '/warehouse/items',
                                 'roles' => ['superadmin'],
+                            ],
+                            [
+                                'name'  => 'Daftar Invoice',
+                                'path'  => '/warehouse/invoices',
+                                'roles' => ['superadmin', 'admin'],
                             ],
                         ],
                     ],
@@ -104,7 +109,6 @@ class MenuHelper
                         'icon'  => 'report',
                         'path'  => '/laporan',
                         'roles' => ['superadmin'],
-                        'new'   => true,
                     ],
                 ],
             ],

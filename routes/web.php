@@ -7,6 +7,8 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\HandoverController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -35,11 +37,52 @@ Route::middleware(['auth', 'role:admin,superadmin'])
     ->name('warehouse.')
     ->group(function () {
 
+        //ROUTE INDEX GUDANG
         Route::resource('items', ItemController::class)
             ->only(['index', 'show']);
-
         Route::get('items/{item}/stock-card', [ItemController::class, 'stockCard'])
             ->name('items.stock-card');
+
+        //ROUTE INVOICE
+        Route::get('invoices', [InvoiceController::class, 'index'])
+            ->name('invoices.index');
+
+        Route::get('invoices/create', [InvoiceController::class, 'create'])
+            ->name('invoices.create');
+
+        Route::post('invoices', [InvoiceController::class, 'store'])
+            ->name('invoices.store');
+
+        Route::get('invoices/{invoice}', [InvoiceController::class, 'show'])
+            ->name('invoices.show');
+
+        Route::patch('invoices/{invoice}/cancel', [InvoiceController::class, 'cancel'])
+            ->name('invoices.cancel');
+
+        Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])
+            ->name('invoices.destroy');
+
+        //ROUTE HANDOVER
+        Route::get('handovers', [HandoverController::class, 'index'])
+            ->name('handovers.index');
+
+        Route::get('handovers/create', [HandoverController::class, 'create'])
+            ->name('handovers.create');
+
+        Route::post('handovers', [HandoverController::class, 'store'])
+            ->name('handovers.store');
+
+        Route::get('handovers/{handover}', [HandoverController::class, 'show'])
+            ->name('handovers.show');
+
+        Route::get('handovers/{handover}/edit', [HandoverController::class, 'edit'])
+            ->name('handovers.edit');
+
+        Route::put('handovers/{handover}', [HandoverController::class, 'update'])
+            ->name('handovers.update');
+
+        Route::delete('handovers/{handover}', [HandoverController::class, 'destroy'])
+            ->name('handovers.destroy');
     });
 
 
