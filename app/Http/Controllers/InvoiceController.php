@@ -16,7 +16,7 @@ class InvoiceController extends Controller
     public function index()
     {
         $invoices = Invoice::latest()->get();
-        return view('warehouse.invoices.index', compact('invoices'));
+        return view('pages.invoices.index', compact('invoices'));
     }
 
     /**
@@ -26,7 +26,7 @@ class InvoiceController extends Controller
     {
         // hanya item dengan stok tersedia
         $items = Item::where('quantity', '>', 0)->get();
-        return view('warehouse.invoices.create', compact('items'));
+        return view('pages.invoices.create', compact('items'));
     }
 
     /**
@@ -92,7 +92,7 @@ class InvoiceController extends Controller
             });
 
             return redirect()
-                ->route('invoices.index')
+                ->route('warehouse.invoices.index')
                 ->with('success', 'Invoice berhasil dibuat');
 
         } catch (\Throwable $e) {
@@ -108,7 +108,7 @@ class InvoiceController extends Controller
     public function show(Invoice $invoice)
     {
         $invoice->load('items.item');
-        return view('warehouse.invoices.show', compact('invoice'));
+        return view('pages.invoices.show', compact('invoice'));
     }
 
     /**
@@ -150,7 +150,7 @@ class InvoiceController extends Controller
         $invoice->delete();
 
         return redirect()
-            ->route('invoices.index')
+            ->route('warehouse.invoices.index')
             ->with('success', 'Invoice berhasil disembunyikan');
     }
 }

@@ -83,7 +83,7 @@ class MenuHelper
                             [
                                 'name'  => 'Daftar Barang',
                                 'path'  => '/warehouse/items',
-                                'roles' => ['superadmin'],
+                                'roles' => ['superadmin', 'admin'],
                             ],
                             [
                                 'name'  => 'Daftar Invoice',

@@ -16,13 +16,13 @@ class HandoverController extends Controller
             ->latest()
             ->get();
 
-        return view('warehouse.handovers.index', compact('handovers'));
+        return view('pages.handovers.index', compact('handovers'));
     }
 
     // Form tambah handover
     public function create()
     {
-        return view('warehouse.handovers.create');
+        return view('pages.handovers.create');
     }
 
     // Simpan handover (STOCK IN)
@@ -63,7 +63,7 @@ class HandoverController extends Controller
         });
 
         return redirect()
-            ->route('handovers.index')
+            ->route('warehouse.handovers.index')
             ->with('success', 'Handover berhasil dibuat');
     }
 
@@ -75,13 +75,13 @@ class HandoverController extends Controller
             'stockItems'
         ]);
 
-        return view('warehouse.handovers.show', compact('handover'));
+        return view('pages.handovers.show', compact('handover'));
     }
 
     // Edit handover (biasanya jarang dipakai)
     public function edit(Handover $handover)
     {
-        return view('warehouse.handovers.edit', compact('handover'));
+        return view('pages.handovers.edit', compact('handover'));
     }
 
     // Update handover (HEADER ONLY)
@@ -93,7 +93,7 @@ class HandoverController extends Controller
         ]);
 
         return redirect()
-            ->route('handovers.index')
+            ->route('warehouse.handovers.index')
             ->with('success', 'Handover berhasil diupdate');
     }
 
@@ -103,7 +103,7 @@ class HandoverController extends Controller
         $handover->delete();
 
         return redirect()
-            ->route('handovers.index')
+            ->route('warehouse.handovers.index')
             ->with('success', 'Handover berhasil dihapus');
     }
 }
