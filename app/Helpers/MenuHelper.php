@@ -77,7 +77,7 @@ class MenuHelper
                         'subItems' => [
                             [
                                 'name'  => 'Daftar Handover',
-                                'path'  => '/warehouse/handover',
+                                'path'  => '/warehouse/handovers',
                                 'roles' => ['superadmin', 'admin'],
                             ],
                             [
