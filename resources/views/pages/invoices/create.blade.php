@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10"
-     x-data="invoiceForm()">
+     x-data="invoiceForm({{ $items->toJson() }})">
 
     <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
         Buat Invoice
@@ -25,28 +25,47 @@
             </h3>
 
             <template x-for="(row, index) in rows" :key="index">
-                <div class="mb-4 grid grid-cols-5 gap-4">
-                    <select :name="`items[${index}][item_id]`" class="input" required>
+                <div class="mb-3 grid grid-cols-6 gap-3 items-center">
+                    
+                    <!-- Item -->
+                    <select :name="`items[${index}][item_id]`"
+                            class="input col-span-2"
+                            x-model="row.item_id"
+                            @change="updatePrice(row)"
+                            required>
                         <option value="">-- Pilih Barang --</option>
-                        @foreach($items as $item)
-                            <option value="{{ $item->id }}">
-                                {{ $item->name }} (Stok: {{ $item->quantity }})
+                        <template x-for="item in items" :key="item.id">
+                            <option :value="item.id">
+                                <span x-text="item.name"></span>
+                                (Stok: <span x-text="item.quantity"></span>)
                             </option>
-                        @endforeach
+                        </template>
                     </select>
 
+                    <!-- Qty -->
                     <input type="number"
-                           :name="`items[${index}][quantity]`"
                            min="1"
-                           placeholder="Qty"
                            class="input"
+                           placeholder="Qty"
+                           x-model.number="row.qty"
+                           :name="`items[${index}][quantity]`"
+                           @input="calc()"
                            required>
 
-                    <div></div>
+                    <!-- Harga -->
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        <span x-text="rupiah(row.price)"></span>
+                    </div>
 
+                    <!-- Subtotal -->
+                    <div class="text-sm font-semibold text-gray-800 dark:text-gray-400">
+                        <span x-text="rupiah(row.subtotal)"></span>
+                    </div>
+
+                    <!-- Delete -->
                     <button type="button"
                             @click="remove(index)"
-                            class="rounded-lg bg-red-500 px-3 text-white">
+                            class="h-8 w-8 rounded-md bg-red-500 text-xs text-white flex items-center justify-center">
                         ✕
                     </button>
                 </div>
@@ -54,9 +73,40 @@
 
             <button type="button"
                     @click="add()"
-                    class="rounded-lg bg-primary px-4 py-2 text-white">
+                    class="mt-3 rounded-lg bg-primary px-4 py-2 text-white">
                 + Tambah Barang
             </button>
+        </div>
+
+        <!-- Summary -->
+        <div class="mt-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03] max-w-md ml-auto">
+            <div class="flex justify-between text-sm mb-2 dark:text-gray-400">
+                <span>Subtotal</span>
+                <span x-text="rupiah(subtotal)"></span>
+            </div>
+
+            <div class="flex justify-between text-sm mb-2 items-center dark:text-gray-400">
+                <span>Diskon</span>
+                <input type="number"
+                       x-model.number="discount"
+                       class="input w-32 text-right"
+                       placeholder="0">
+            </div>
+
+            <div class="flex justify-between text-sm mb-2 items-center dark:text-gray-400">
+                <span>Shipping</span>
+                <input type="number"
+                       x-model.number="shipping"
+                       class="input w-32 text-right"
+                       placeholder="0">
+            </div>
+
+            <hr class="my-3 dark:border-gray-700">
+
+            <div class="flex justify-between font-semibold text-gray-800 dark:text-white/90">
+                <span>Total</span>
+                <span x-text="rupiah(total)"></span>
+            </div>
         </div>
 
         <div class="mt-6 flex justify-end">
@@ -68,11 +118,45 @@
 </div>
 
 <script>
-function invoiceForm() {
+function invoiceForm(items) {
     return {
-        rows: [{}],
-        add() { this.rows.push({}) },
-        remove(i) { this.rows.splice(i,1) }
+        items,
+        rows: [{ item_id: '', qty: 1, price: 0, subtotal: 0 }],
+        discount: 0,
+        shipping: 0,
+        subtotal: 0,
+        total: 0,
+
+        add() {
+            this.rows.push({ item_id: '', qty: 1, price: 0, subtotal: 0 })
+        },
+
+        remove(i) {
+            this.rows.splice(i, 1)
+            this.calc()
+        },
+
+        updatePrice(row) {
+            const item = this.items.find(i => i.id == row.item_id)
+            row.price = item ? item.price : 0
+            this.calc()
+        },
+
+        calc() {
+            this.subtotal = 0
+            this.rows.forEach(r => {
+                r.subtotal = r.qty * r.price
+                this.subtotal += r.subtotal
+            })
+            this.total = this.subtotal - this.discount + this.shipping
+        },
+
+        rupiah(val) {
+            return new Intl.NumberFormat('id-ID', {
+                style: 'currency',
+                currency: 'IDR'
+            }).format(val || 0)
+        }
     }
 }
 </script>

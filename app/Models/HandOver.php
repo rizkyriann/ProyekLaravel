@@ -4,6 +4,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\HandOverItem;
+use App\Models\Item;
 
 class Handover extends Model
 {
@@ -19,7 +20,7 @@ class Handover extends Model
     ];
 
     // Relasi → HandOver memiliki banyak handover_items
-    public function items()
+    public function handoverItems()
     {
         return $this->hasMany(HandoverItem::class, 'handover_id');
     }

@@ -10,7 +10,7 @@ return new class extends Migration {
         Schema::create('handover_items', function (Blueprint $table) {
             $table->id();
             $table->foreignId('handover_id')->constrained('handovers')->onDelete('cascade');
-            $table->string('sku', 50);
+            $table->string('sku', 50)->unique();
             $table->string('item_name', 150);
             $table->integer('quantity')->default(0);
             $table->decimal('price', 15, 2)->default(0);

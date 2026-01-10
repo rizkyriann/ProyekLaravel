@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Handover;
 use App\Models\Item;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,7 +23,9 @@ class HandoverController extends Controller
     // Form tambah handover
     public function create()
     {
-        return view('pages.handovers.create');
+        return view('pages.handovers.create', [
+            'handoverNo' => $this->generateHandoverNo()
+        ]);
     }
 
     // Simpan handover (STOCK IN)
@@ -30,16 +33,29 @@ class HandoverController extends Controller
     {
         DB::transaction(function () use ($request) {
 
+            // 0. VALIDASI
+            $data = $request->validate([
+                'source' => 'required|string',
+                'handover_date' => 'required|date',
+                'items' => 'required|array|min:1',
+                'items.*.item_name' => 'required|string',
+                'items.*.sku' => 'required|string|distinct',
+                'items.*.quantity' => 'required|integer|min:1',
+                'items.*.price' => 'required|numeric|min:0',
+            ]);
+
+            $handoverNo = $this->generateHandoverNo();
+
             // 1. SIMPAN HANDOVER (HEADER)
             $handover = Handover::create([
-                'handover_no'   => $request->handover_no,
-                'source'        => $request->source, // supplier
-                'handover_date' => $request->handover_date,
+                'handover_no'   => $handoverNo,
+                'source'        => $data['source'], // supplier
+                'handover_date' => $data['handover_date'],
                 'status'        => 'completed',
             ]);
 
             // 2. SIMPAN HANDOVER ITEMS + MASUK STOK
-            foreach ($request->items as $itemData) {
+            foreach ($data['items'] as $itemData) {
 
                 // detail barang masuk (dokumen)
                 $handoverItem = $handover->handoverItems()->create([
@@ -59,6 +75,13 @@ class HandoverController extends Controller
                     'price'             => $itemData['price'],
                     'status'            => 'active',
                 ]);
+
+                // Mencegah dupliaksi SKU
+                if (Item::where('sku', $itemData['sku'])->exists()) {
+                    return back()
+                        ->withErrors(['SKU' => "SKU {$itemData['sku']} sudah terdaftar"])
+                        ->withInput();
+                }
             }
         });
 
@@ -106,4 +129,20 @@ class HandoverController extends Controller
             ->route('warehouse.handovers.index')
             ->with('success', 'Handover berhasil dihapus');
     }
+
+    private function generateHandoverNo()
+    {
+        $date = Carbon::now()->format('Ym');
+
+        $last = Handover::where('handover_no', 'like', "HO-$date%")
+            ->latest('id')
+            ->first();
+
+        $number = $last
+            ? intval(substr($last->handover_no, -4)) + 1
+            : 1;
+
+        return "HO-$date-" . str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
+
 }

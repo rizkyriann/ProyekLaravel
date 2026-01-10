@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ProfileController;
@@ -83,6 +84,12 @@ Route::middleware(['auth', 'role:admin,superadmin'])
 
         Route::delete('handovers/{handover}', [HandoverController::class, 'destroy'])
             ->name('handovers.destroy');
+
+        Route::get('/warehouse/check-sku', function (Request $request) {
+            return response()->json([
+                'exists' => \App\Models\Item::where('sku', $request->sku)->exists()
+            ]);
+        })->name('warehouse.check-sku');
     });
 
 
