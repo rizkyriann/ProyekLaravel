@@ -132,9 +132,9 @@
                     <button
                         type="button"
                         @click="remove(index)"
-                        class="h-8 w-8 rounded-md bg-red-500 text-xs text-white flex items-center justify-center"
+                        class="h-8 w-30 text-sm rounded-md bg-red-500 text-white flex items-center justify-center"
                     >
-                        ✕
+                        Hapus Item
                     </button>
                 </div>
             </template>
@@ -150,6 +150,9 @@
 
         </div>
 
+        <div class="text-sm font-semibold text-gray-800 dark:text-gray-400">
+                *) Kode SKU (3 Huruf-3 Angka), Jika SKU sudah digunakan, silakan ganti dengan SKU lain.
+        </div>
         <!-- SUMMARY -->
         <div class="mt-6 max-w-md ml-auto rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
             <div class="flex justify-between font-semibold text-gray-800 dark:text-white/90">
@@ -186,8 +189,8 @@ function handoverForm() {
                 sku: '',
                 skuError: false,
                 name: '',
-                qty: 0,
-                price: 0,
+                qty: '',
+                price: '',
                 subtotal: 0
             }
         ],
@@ -198,8 +201,8 @@ function handoverForm() {
                 sku: '',
                 skuError: false,
                 name: '',
-                qty: 0,
-                price: 0,
+                qty: '',
+                price: '',
                 subtotal: 0
             })
         },

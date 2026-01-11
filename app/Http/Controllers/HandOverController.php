@@ -33,7 +33,6 @@ class HandoverController extends Controller
     {
         DB::transaction(function () use ($request) {
 
-            // 0. VALIDASI
             $data = $request->validate([
                 'source' => 'required|string',
                 'handover_date' => 'required|date',
@@ -44,50 +43,90 @@ class HandoverController extends Controller
                 'items.*.price' => 'required|numeric|min:0',
             ]);
 
-            $handoverNo = $this->generateHandoverNo();
+            // CEK SKU SEBELUM INSERT APA PUN
+            foreach ($data['items'] as $item) {
+                if (Item::where('sku', $item['sku'])->exists()) {
+                    throw new \Exception("SKU {$item['sku']} sudah terdaftar");
+                }
+            }
 
-            // 1. SIMPAN HANDOVER (HEADER)
+            // HEADER → DRAFT
             $handover = Handover::create([
-                'handover_no'   => $handoverNo,
-                'source'        => $data['source'], // supplier
+                'handover_no'   => $this->generateHandoverNo(),
+                'source'        => $data['source'],
                 'handover_date' => $data['handover_date'],
-                'status'        => 'completed',
+                'status'        => 'draft',
             ]);
 
-            // 2. SIMPAN HANDOVER ITEMS + MASUK STOK
+            // DETAIL (DOKUMEN SAJA)
             foreach ($data['items'] as $itemData) {
-
-                // detail barang masuk (dokumen)
-                $handoverItem = $handover->handoverItems()->create([
+                $handover->handoverItems()->create([
                     'sku'       => $itemData['sku'],
                     'item_name' => $itemData['item_name'],
                     'quantity'  => $itemData['quantity'],
                     'price'     => $itemData['price'],
                 ]);
-
-                // stok gudang (hasil transaksi)
-                Item::create([
-                    'handover_id'       => $handover->id,
-                    'handover_item_id'  => $handoverItem->id,
-                    'sku'               => $itemData['sku'],
-                    'name'              => $itemData['item_name'],
-                    'quantity'          => $itemData['quantity'],
-                    'price'             => $itemData['price'],
-                    'status'            => 'active',
-                ]);
-
-                // Mencegah dupliaksi SKU
-                if (Item::where('sku', $itemData['sku'])->exists()) {
-                    return back()
-                        ->withErrors(['SKU' => "SKU {$itemData['sku']} sudah terdaftar"])
-                        ->withInput();
-                }
             }
         });
 
         return redirect()
             ->route('warehouse.handovers.index')
-            ->with('success', 'Handover berhasil dibuat');
+            ->with('success', 'Handover draft berhasil dibuat');
+    }
+
+    // Fungsi konfirmasi handover (FINAL)
+    public function confirm(Handover $handover)
+    {
+        if ($handover->status !== 'draft') {
+            return back()->withErrors('Handover tidak bisa dikonfirmasi');
+        }
+
+        DB::transaction(function () use ($handover) {
+
+            foreach ($handover->handoverItems as $detail) {
+                if (Item::where('sku', $detail->sku)->exists()) {
+                    throw new \Exception("SKU {$detail->sku} sudah terdaftar");
+                }
+                
+                Item::create([
+                    'handover_id'      => $handover->id,
+                    'handover_item_id' => $detail->id,
+                    'sku'              => $detail->sku,
+                    'name'             => $detail->item_name,
+                    'quantity'         => $detail->quantity,
+                    'price'            => $detail->price,
+                    'status'           => 'active',
+                ]);
+            }
+
+            $handover->update([
+                'status' => 'confirmed'
+            ]);
+        });
+
+        return back()->with('success', 'Handover berhasil dikonfirmasi');
+    }
+
+    // Ubah status cancel
+    public function cancel(Handover $handover)
+    {
+        if ($handover->status === 'cancelled') {
+            return back()->withErrors('Handover sudah dibatalkan');
+        }
+
+        DB::transaction(function () use ($handover) {
+
+            // rollback stok JIKA sudah confirm
+            if ($handover->status === 'confirmed') {
+                Item::where('handover_id', $handover->id)->delete();
+            }
+
+            $handover->update([
+                'status' => 'cancelled'
+            ]);
+        });
+
+        return back()->with('success', 'Handover berhasil dibatalkan');
     }
 
     // Detail handover

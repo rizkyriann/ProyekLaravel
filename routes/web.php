@@ -90,6 +90,12 @@ Route::middleware(['auth', 'role:admin,superadmin'])
                 'exists' => \App\Models\Item::where('sku', $request->sku)->exists()
             ]);
         })->name('warehouse.check-sku');
+
+        Route::post('{handover}/confirm', [HandoverController::class, 'confirm'])
+            ->name('handovers.confirm');
+
+        Route::post('{handover}/cancel', [HandoverController::class, 'cancel'])
+            ->name('handovers.cancel');
     });
 
 
