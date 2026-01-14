@@ -43,7 +43,7 @@
                         </td>
 
                         <td class="px-5 py-4 text-theme-sm text-gray-500 dark:text-gray-400">
-                            {{ optional($item->handoverItem)->item_name }}
+                            {{ optional($item->handoverItems->first())->item_name ?? '-' }}
                         </td>
 
                         <td class="px-5 py-4 text-theme-sm font-semibold">

@@ -14,7 +14,7 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Item::with(['handoverItem', 'handover'])
+        $query = Item::with(['handoverItems', 'handover'])
             ->where('status', 'active');
 
         // Search
