@@ -54,14 +54,14 @@
 
                         <td class="px-5 py-4">
                             <div class="flex justify-center gap-2">
-                                <a href="{{ route('warehouse.items.show', $item->id) }}"
-                                   class="rounded-md bg-primary px-3 py-1.5 text-sm text-white hover:bg-primary/90">
-                                    Detail
-                                </a>
                                 <a href="{{ route('warehouse.items.stock-card', $item->id) }}"
-                                   class="rounded-md border border-gray-300 px-3 py-1.5 text-sm
-                                          dark:border-gray-700 dark:text-white">
-                                    Kartu Stok
+                                   <x-ui.button
+                                       type="button"
+                                       variant="primary-outline"
+                                       size="sm"
+                                      >
+                                        Kartu Stok
+                                    </x-ui.button>
                                 </a>
                             </div>
                         </td>

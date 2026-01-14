@@ -93,7 +93,7 @@
                     <input
                         type="text"
                         :name="`items[${index}][item_name]`"
-                        placeholder="Nama Barang"
+                        placeholder="  Nama Barang"
                         class="input col-span-2 text-gray-800 dark:text-white/90 bg-transparent"
                         x-model="row.name"
                         required
@@ -104,7 +104,7 @@
                         type="number"
                         min="1"
                         :name="`items[${index}][quantity]`"
-                        placeholder="Qty"
+                        placeholder="  Qty"
                         class="input text-gray-800 dark:text-white/90 bg-transparent"
                         x-model.number="row.qty"
                         @input="calc()"
@@ -116,7 +116,7 @@
                         type="number"
                         min="0"
                         :name="`items[${index}][price]`"
-                        placeholder="Harga"
+                        placeholder="  Harga"
                         class="input text-gray-800 dark:text-white/90 bg-transparent"
                         x-model.number="row.price"
                         @input="calc()"
@@ -174,7 +174,6 @@
                  >
                 Simpan Handover
             </x-ui.button>
-
         </div>
 
     </form>

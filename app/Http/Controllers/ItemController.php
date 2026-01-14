@@ -58,8 +58,7 @@ class ItemController extends Controller
     public function stockCard($id)
     {
         $item = Item::with([
-            'handover',
-            'handoverItem',
+            'handoverItems.handover',
             'invoiceItems.invoice'
         ])->findOrFail($id);
 

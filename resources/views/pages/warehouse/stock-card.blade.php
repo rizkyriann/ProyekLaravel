@@ -35,10 +35,14 @@
                     {{-- Barang Masuk --}}
                     @foreach ($item->handover as $handover)
                     <tr class="border-b border-gray-100 dark:border-gray-800">
-                        <td class="px-5 py-4">{{ $handover->date }}</td>
-                        <td class="px-5 py-4">Handover #{{ $handover->id }}</td>
-                        <td class="px-5 py-4 text-center text-green-600 font-semibold">
-                            {{ $handover->pivot->quantity }}
+                        <td class="px-5 py-4 text-sm text-gray-700 dark:text-gray-300">
+                             {{ $item->handoverItems->last()?->handover?->handover_date ?? '-' }}
+                        </td>
+                        <td class="px-5 py-4 text-sm text-gray-700 dark:text-gray-300">
+                             {{ $item->handoverItems->last()?->handover?->id ?? '-' }}
+                        </td>
+                        <td class="px-5 py-4 text-sm text-gray-700 dark:text-gray-300">
+                             {{ $item->handoverItems->last()?->handover?->quantity ?? '-' }}
                         </td>
                         <td class="px-5 py-4 text-center">-</td>
                         <td class="px-5 py-4">Barang Masuk Gudang</td>
@@ -60,7 +64,7 @@
                     </tr>
                     @endforeach
 
-                    @if ($item->handover->isEmpty() && $item->invoiceItems->isEmpty())
+                    @if ($item->handoverItems->isEmpty() && $item->invoiceItems->isEmpty())
                     <tr>
                         <td colspan="5" class="px-5 py-6 text-center text-gray-500">
                             Belum ada transaksi
@@ -73,7 +77,7 @@
         </div>
     </div>
 
-    <a href="{{ route('pages.warehouse.items.index') }}"
+    <a href="{{ route('warehouse.items.index') }}"
        class="mt-6 inline-block rounded-md border border-gray-300 px-4 py-2 text-sm
               dark:border-gray-700 dark:text-white">
         Kembali
