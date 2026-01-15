@@ -23,7 +23,7 @@ class ItemController extends Controller
 
             $query->where(function ($q) use ($search) {
                 $q->where('sku', 'like', "%{$search}%")
-                  ->orWhereHas('handoverItem', function ($hq) use ($search) {
+                  ->orWhereHas('handoverItems', function ($hq) use ($search) {
                       $hq->where('item_name', 'like', "%{$search}%");
                   });
             });
@@ -45,7 +45,7 @@ class ItemController extends Controller
     {
         $item = Item::with([
             'handover',
-            'handoverItem'
+            'handoverItems'
         ])->findOrFail($id);
 
         return view('pages.warehouse.show', compact('item'));
@@ -74,7 +74,7 @@ class ItemController extends Controller
             'q' => 'required|min:2'
         ]);
 
-        $items = Item::with('handoverItem')
+        $items = Item::with('handoverItems')
             ->where('status', 'active')
             ->where('quantity', '>', 0)
             ->where(function ($q) use ($request) {

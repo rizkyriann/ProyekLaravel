@@ -28,7 +28,7 @@ class Item extends Model
 
     public function handoverItems()
     {
-        return $this->hasMany(HandOverItem::class, 'handover_id');
+        return $this->hasOne(HandOverItem::class, 'handover_id');
     }
 
     public function invoiceItems()

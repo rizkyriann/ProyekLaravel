@@ -11,7 +11,7 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('handover_id')->constrained('handovers')->onDelete('cascade');
             $table->string('sku', 50)->unique();
-            $table->string('item_name', 150);
+            $table->string('name', 150);
             $table->integer('quantity')->default(0);
             $table->decimal('price', 15, 2)->default(0);
             $table->text('notes')->nullable();

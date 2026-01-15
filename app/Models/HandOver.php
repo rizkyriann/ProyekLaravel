@@ -33,7 +33,7 @@ class Handover extends Model
     // Relasi → HandOver memiliki banyak handover_items
     public function handoverItems()
     {
-        return $this->hasMany(HandoverItem::class, 'handover_id');
+        return $this->hasMany(HandOverItem::class, 'handover_id');
     }
 
     // Relasi → HandOver memiliki banyak Items di stok gudang

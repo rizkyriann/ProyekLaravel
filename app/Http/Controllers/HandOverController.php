@@ -37,7 +37,7 @@ class HandoverController extends Controller
                 'source' => 'required|string',
                 'handover_date' => 'required|date',
                 'items' => 'required|array|min:1',
-                'items.*.item_name' => 'required|string',
+                'items.*.name' => 'required|string',
                 'items.*.sku' => 'required|string|distinct',
                 'items.*.quantity' => 'required|integer|min:1',
                 'items.*.price' => 'required|numeric|min:0',
@@ -62,7 +62,7 @@ class HandoverController extends Controller
             foreach ($data['items'] as $itemData) {
                 $handover->handoverItems()->create([
                     'sku'       => $itemData['sku'],
-                    'item_name' => $itemData['item_name'],
+                    'name' => $itemData['name'],
                     'quantity'  => $itemData['quantity'],
                     'price'     => $itemData['price'],
                 ]);
