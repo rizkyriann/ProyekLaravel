@@ -13,10 +13,20 @@
 
         <!-- Header -->
         <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
-            <input class="input" name="invoice_no" placeholder="No Invoice" required>
-            <input class="input" type="date" name="date" required>
+            <input 
+                class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400 bg-transparent"
+                name="invoice_no"
+                placeholder="No Invoice"
+                required
+            >
+            <input 
+                class="input"
+                type="date"
+                name="date"
+                value="{{ old('date', now()->format('Y-m-d')) }}"
+                required
+            >
             <input class="input" name="customer" placeholder="Customer" required>
-
             <!-- total wajib dikirim -->
             <input type="hidden" name="total" :value="total">
         </div>

@@ -8,10 +8,12 @@
             Daftar Invoice
         </h2>
 
-        <a href="{{ route('warehouse.invoices.create') }}"
-           class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90">
-            + Buat Invoice
+        <a href="{{ route('warehouse.invoices.create') }}">
+            <x-ui.button size="md" variant="primary" class="whitespace-nowrap h-7">
+                Tambah Invoice
+            </x-ui.button>
         </a>
+
     </div>
 
     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">

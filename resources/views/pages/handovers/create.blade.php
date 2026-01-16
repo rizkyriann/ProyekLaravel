@@ -51,6 +51,7 @@
                     class="input text-gray-700 dark:text-gray-400"
                     type="date"
                     name="handover_date"
+                    value="{{ old('handover_date', now()->format('Y-m-d')) }}"
                     required
                 >
             </div>
