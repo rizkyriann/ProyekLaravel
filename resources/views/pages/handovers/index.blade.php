@@ -21,40 +21,39 @@
         <div class="max-w-full overflow-x-auto custom-scrollbar">
             <table class="w-full min-w-[1100px]">
                 <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-800">
-
+                    <tr class="border bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-800">
                         <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 No Handover
                             </p>
                         </th>
 
-                        <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <th class="px-5 py-2 text-left sm:px-6">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 Sumber
                             </p>
                         </th>
 
-                        <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <th class="px-5 py-2 text-left sm:px-6">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 Tanggal
                             </p>
                         </th>
 
-                        <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <th class="px-5 py-2 text-left sm:px-6">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 Jumlah Item
                             </p>
                         </th>
 
-                        <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <th class="px-5 py-2 text-left sm:px-6">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 Status
                             </p>
                         </th>
 
-                        <th class="px-5 py-3 text-center sm:px-6 w-[120px]">
-                            <p class="font-medium text-gray-500 text-theme-xs dark:text-gray-400">
+                        <th class="px-5 py-2 text-center sm:px-6 w-[120px]">
+                            <p class="font-medium text-gray-500 dark:text-gray-400">
                                 Aksi
                             </p>
                         </th>
@@ -64,49 +63,49 @@
 
                 <tbody>
                     @forelse ($handovers as $handover)
-                        <tr class="border-b border-gray-100 dark:border-gray-800">
+                        <tr class="border-b border-gray-200 dark:border-gray-800">
 
                             <!-- No Handover -->
-                            <td class="px-5 py-4 sm:px-6">
+                            <td class="px-5 py-2 sm:px-6">
                                 <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
                                     {{ $handover->handover_no }}
                                 </p>
                             </td>
 
                             <!-- Source -->
-                            <td class="px-5 py-4 sm:px-6">
+                            <td class="px-5 py-2 sm:px-6">
                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                                     {{ $handover->source }}
                                 </p>
                             </td>
 
                             <!-- Date -->
-                            <td class="px-5 py-4 sm:px-6">
+                            <td class="px-5 py-2 sm:px-6">
                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                                     {{ \Carbon\Carbon::parse($handover->handover_date)->format('d M Y') }}
                                 </p>
                             </td>
 
                             <!-- Total Items -->
-                            <td class="px-5 py-4 sm:px-6">
+                            <td class="px-5 py-2 sm:px-6">
                                 <p class="text-gray-500 text-theme-sm dark:text-gray-400">
                                     {{ $handover->handoverItems->count() }} item
                                 </p>
                             </td>
 
                             <!-- Status -->
-                            <td class="px-5 py-4 sm:px-6">
+                            <td class="px-5 py-2 sm:px-6">
                                 <span class="inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium {{ $handover->status_badge_class }}">
                                     {{ ucfirst($handover->status) }}
                                 </span>
                             </td>
 
                             <!-- Action -->
-                            <td class="px-5 py-2 sm:px-6">
+                            <td class="px-1 py-1 sm:px-6">
                                 <div class="flex items-center justify-center gap-3">
                                     <!-- Detail -->
                                     <a href="{{ route('warehouse.handovers.show', $handover) }}"
-                                       class="inline-flex items-center justify-center rounded-md bg-primary p-2
+                                       class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1
                                               text-gray-800 hover:bg-primary/90 dark:text-white/90">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7 mt-5">
                                             <path d="M11.625 16.5a1.875 1.875 0 1 0 0-3.75 1.875 1.875 0 0 0 0 3.75Z" />
@@ -117,7 +116,7 @@
 
                                     <!--Edit-->
                                     <a href="{{ route('warehouse.handovers.edit', $handover) }}"
-                                       class="inline-flex items-center justify-center rounded-md bg-primary p-2
+                                       class="inline-flex items-center justify-center rounded-md bg-primary px-2 py-1
                                               text-gray-800 hover:bg-primary/90 dark:text-white/90">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7 mt-5">
                                             <path fill-rule="evenodd" d="M5.625 1.5c-1.036 0-1.875.84-1.875 1.875v17.25c0 1.035.84 1.875 1.875 1.875h12.75c1.035 0 1.875-.84 1.875-1.875V12.75A3.75 3.75 0 0 0 16.5 9h-1.875a1.875 1.875 0 0 1-1.875-1.875V5.25A3.75 3.75 0 0 0 9 1.5H5.625ZM7.5 15a.75.75 0 0 1 .75-.75h7.5a.75.75 0 0 1 0 1.5h-7.5A.75.75 0 0 1 7.5 15Zm.75 2.25a.75.75 0 0 0 0 1.5H12a.75.75 0 0 0 0-1.5H8.25Z" clip-rule="evenodd" />

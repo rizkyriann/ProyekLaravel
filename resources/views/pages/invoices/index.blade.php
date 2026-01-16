@@ -9,47 +9,65 @@
         </h2>
 
         <a href="{{ route('warehouse.invoices.create') }}"
-           class="rounded-lg bg-primary px-4 py-2 text-white hover:bg-primary/90">
+           class="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white hover:bg-primary/90">
             + Buat Invoice
         </a>
     </div>
 
     <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="max-w-full overflow-x-auto custom-scrollbar">
-            <table class="w-full min-w-[900px]">
+        <div class="max-w-full overflow-x-auto">
+            <table class="w-full min-w-[900px] border-collapse">
                 <thead>
-                    <tr class="border-b border-gray-100 dark:border-gray-800">
-                        <th class="th">No Invoice</th>
-                        <th class="th">Tanggal</th>
-                        <th class="th">Customer</th>
-                        <th class="th">Status</th>
-                        <th class="th text-center">Aksi</th>
+                    <tr class="border-b border-gray-200 dark:border-gray-800">
+                        <th class="px-5 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            No Invoice
+                        </th>
+                        <th class="px-5 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            Tanggal
+                        </th>
+                        <th class="px-5 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            Customer
+                        </th>
+                        <th class="px-5 py-4 text-left text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            Status
+                        </th>
+                        <th class="px-5 py-4 text-center text-sm font-semibold text-gray-600 dark:text-gray-300">
+                            Aksi
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+
+                <tbody class="divide-y divide-gray-100 dark:divide-gray-800">
                     @forelse($invoices as $invoice)
-                    <tr class="border-b border-gray-100 dark:border-gray-800">
-                        <td class="td">{{ $invoice->invoice_no }}</td>
-                        <td class="td">{{ $invoice->invoice_date }}</td>
-                        <td class="td">{{ $invoice->customer_name }}</td>
-                        <td class="td">
-                            <span class="rounded-full px-3 py-1 text-xs font-medium
+                    <tr class="hover:bg-gray-50 dark:hover:bg-white/[0.04]">
+                        <td class="px-5 py-4 text-theme-sm text-gray-700 dark:text-gray-300">
+                            {{ $invoice->invoice_no }}
+                        </td>
+                        <td class="px-5 py-4 text-theme-sm text-gray-700 dark:text-gray-300">
+                            {{ \Carbon\Carbon::parse($invoice->date)->format('d M Y') }}
+                        </td>
+                        <td class="px-5 py-4 text-theme-sm text-gray-700 dark:text-gray-300">
+                            {{ $invoice->customer }}
+                        </td>
+                        <td class="px-5 py-4">
+                            <span class="inline-flex rounded-full px-3 py-1 text-xs font-medium
                                 {{ $invoice->status === 'paid'
                                     ? 'bg-green-100 text-green-700 dark:bg-green-500/10 dark:text-green-400'
                                     : 'bg-red-100 text-red-700 dark:bg-red-500/10 dark:text-red-400' }}">
                                 {{ strtoupper($invoice->status) }}
                             </span>
                         </td>
-                        <td class="td text-center">
+                        <td class="px-5 py-4 text-center">
                             <a href="{{ route('warehouse.invoices.show', $invoice) }}"
-                               class="text-primary hover:underline">
+                               class="text-sm font-medium text-primary hover:underline">
                                 Detail
                             </a>
                         </td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="5" class="td text-center text-gray-500">
+                        <td colspan="5"
+                            class="px-5 py-6 text-center text-theme-sm text-gray-500 dark:text-gray-400">
                             Belum ada invoice
                         </td>
                     </tr>

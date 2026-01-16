@@ -35,13 +35,13 @@
 
                 {{-- Handover No --}}
                 <div>
-                    <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-gray-300">
+                    <label class="mb-1 block text-sm font-medium text-gray-800 dark:text-gray-300">
                         Handover No
                     </label>
                     <input
                         type="text"
-                        class="w-full rounded-lg border-gray-300 bg-gray-100 text-gray-600 dark:border-gray-700 dark:bg-gray-800"
-                        value="{{ $handover->handover_no }}"
+                        class="w-full h-8 rounded-lg border-gray-300 bg-gray-100 text-gray-600 dark:text-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                        value="   {{ $handover->handover_no }}"
                         disabled
                     >
                 </div>
@@ -54,8 +54,8 @@
                     <input
                         type="text"
                         name="source"
-                        value="{{ old('source', $handover->source) }}"
-                        class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                        value="   {{ old('source', $handover->source) }}"
+                        class="w-full h-8 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                         {{ $handover->status !== 'draft' ? 'readonly' : '' }}
                     >
                 </div>
@@ -68,8 +68,8 @@
                     <input
                         type="text"
                         name="handover_date"
-                        value="{{ old('handover_date', $handover->handover_date) }}"
-                        class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                        value="   {{ old('handover_date', $handover->handover_date) }}"
+                        class="w-full h-8 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                         {{ $handover->status !== 'draft' ? 'readonly' : '' }}
                     >
                 </div>
@@ -97,8 +97,8 @@
                             <input
                                 type="text"
                                 name="items[{{ $index }}][item_name]"
-                                value="{{ $item->item_name }}"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                                value="   {{ $item->name }}"
+                                class="w-full h-10 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300"
                                 {{ $handover->status !== 'draft' ? 'readonly' : '' }}
                             >
                         </div>
@@ -110,8 +110,8 @@
                             </label>
                             <input
                                 type="text"
-                                value="{{ $item->sku }}"
-                                class="w-full rounded-lg border-gray-300 bg-gray-100 text-gray-600 dark:border-gray-700 dark:bg-gray-800"
+                                value="   {{ $item->sku }}"
+                                class="w-full h-10 rounded-lg border-gray-300 bg-gray-100 text-gray-600 dark:border-gray-700 dark:bg-gray-800"
                                 readonly
                             >
                         </div>
@@ -125,7 +125,7 @@
                                 type="number"
                                 name="items[{{ $index }}][quantity]"
                                 value="{{ $item->quantity }}"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                                class="w-full px-3 h-10 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                                 {{ $handover->status !== 'draft' ? 'readonly' : '' }}
                             >
                         </div>
@@ -139,7 +139,7 @@
                                 type="number"
                                 name="items[{{ $index }}][price]"
                                 value="{{ $item->price }}"
-                                class="w-full rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800"
+                                class="w-full h-10 px-3 rounded-lg border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400"
                                 {{ $handover->status !== 'draft' ? 'readonly' : '' }}
                             >
                         </div>

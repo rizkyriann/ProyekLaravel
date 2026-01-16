@@ -72,7 +72,7 @@ class InvoiceController extends Controller
                     'date' => $request->date,
                     'customer' => $request->customer,
                     'total' => $request->total,
-                    'status' => 'paid',
+                    'status' => 'draft',
                 ]);
 
                 // ======================
