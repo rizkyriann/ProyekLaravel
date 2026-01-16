@@ -32,8 +32,13 @@
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Tanggal Barang</p>
+                <p class="text-sm text-gray-500">Tanggal Masuk</p>
                 <p class="font-semibold">{{ $item->handover->handover_date }}</p>
+            </div>
+
+            <div>
+                <p class="text-sm text-gray-500">Nama Supplier</p>
+                <p class="font-semibold">{{ $item->handover->source }}</p>
             </div>
 
             <div>
@@ -46,11 +51,7 @@
         </div>
 
         <div class="mt-6 flex gap-3">
-            <a href="{{ route('warehouse.items.stock-card', $item->id) }}"
-               class="rounded-lg bg-blue-600 px-4 py-2 text-sm text-white hover:bg-blue-700">
-                Kartu Stok
-            </a>
-
+        
             <a href="{{ route('warehouse.items.index') }}"
                class="rounded-lg border px-4 py-2 text-sm">
                 Kembali

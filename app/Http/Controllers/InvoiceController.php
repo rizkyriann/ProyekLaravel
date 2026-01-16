@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\DB;
 
 class InvoiceController extends Controller
 {
+
+    
     /**
      * List invoice
      */
@@ -39,8 +41,8 @@ class InvoiceController extends Controller
         // ======================
         $request->validate([
             'invoice_no' => 'required|string|unique:invoices,invoice_no',
-            'invoice_date' => 'required|date',
-            'customer_name' => 'required|string',
+            'date' => 'required|date',
+            'customer' => 'required|string',
             'items' => 'required|array|min:1',
             'items.*.item_id' => 'required|exists:items,id',
             'items.*.quantity' => 'required|integer|min:1',
@@ -67,9 +69,10 @@ class InvoiceController extends Controller
                 // ======================
                 $invoice = Invoice::create([
                     'invoice_no' => $request->invoice_no,
-                    'invoice_date' => $request->invoice_date,
-                    'customer_name' => $request->customer_name,
-                    'status' => 'paid'
+                    'date' => $request->date,
+                    'customer' => $request->customer,
+                    'total' => $request->total,
+                    'status' => 'paid',
                 ]);
 
                 // ======================

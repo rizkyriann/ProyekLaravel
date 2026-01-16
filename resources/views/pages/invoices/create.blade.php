@@ -14,8 +14,11 @@
         <!-- Header -->
         <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
             <input class="input" name="invoice_no" placeholder="No Invoice" required>
-            <input class="input" type="date" name="invoice_date" required>
-            <input class="input" name="customer_name" placeholder="Customer" required>
+            <input class="input" type="date" name="date" required>
+            <input class="input" name="customer" placeholder="Customer" required>
+
+            <!-- total wajib dikirim -->
+            <input type="hidden" name="total" :value="total">
         </div>
 
         <!-- Items -->
@@ -26,12 +29,12 @@
 
             <template x-for="(row, index) in rows" :key="index">
                 <div class="mb-3 grid grid-cols-6 gap-3 items-center">
-                    
+
                     <!-- Item -->
                     <select :name="`items[${index}][item_id]`"
                             class="input col-span-2"
                             x-model="row.item_id"
-                            @change="updatePrice(row)"
+                            @change="updateItem(row)"
                             required>
                         <option value="">-- Pilih Barang --</option>
                         <template x-for="item in items" :key="item.id">
@@ -45,6 +48,7 @@
                     <!-- Qty -->
                     <input type="number"
                            min="1"
+                           :max="row.maxQty"
                            class="input"
                            placeholder="Qty"
                            x-model.number="row.qty"
@@ -89,6 +93,7 @@
                 <span>Diskon</span>
                 <input type="number"
                        x-model.number="discount"
+                       @input="calc()"
                        class="input w-32 text-right"
                        placeholder="0">
             </div>
@@ -97,6 +102,7 @@
                 <span>Shipping</span>
                 <input type="number"
                        x-model.number="shipping"
+                       @input="calc()"
                        class="input w-32 text-right"
                        placeholder="0">
             </div>
@@ -109,8 +115,10 @@
             </div>
         </div>
 
+        <!-- Submit -->
         <div class="mt-6 flex justify-end">
-            <button class="rounded-lg bg-primary px-6 py-2 text-white">
+            <button
+                class="rounded-lg bg-primary px-6 py-2 text-white disabled:opacity-50">
                 Simpan Invoice
             </button>
         </div>
@@ -121,14 +129,32 @@
 function invoiceForm(items) {
     return {
         items,
-        rows: [{ item_id: '', qty: 1, price: 0, subtotal: 0 }],
+
+        init() {
+            this.calc()
+        },
+
+        rows: [{
+            item_id: '',
+            qty: 1,
+            price: 0,
+            subtotal: 0,
+            maxQty: 1
+        }],
+
         discount: 0,
         shipping: 0,
         subtotal: 0,
         total: 0,
 
         add() {
-            this.rows.push({ item_id: '', qty: 1, price: 0, subtotal: 0 })
+            this.rows.push({
+                item_id: '',
+                qty: 1,
+                price: 0,
+                subtotal: 0,
+                maxQty: 1
+            })
         },
 
         remove(i) {
@@ -136,18 +162,27 @@ function invoiceForm(items) {
             this.calc()
         },
 
-        updatePrice(row) {
+        updateItem(row) {
             const item = this.items.find(i => i.id == row.item_id)
+
             row.price = item ? item.price : 0
+            row.maxQty = item ? item.quantity : 1
+
+            if (row.qty > row.maxQty) {
+                row.qty = row.maxQty
+            }
+
             this.calc()
         },
 
         calc() {
             this.subtotal = 0
+
             this.rows.forEach(r => {
                 r.subtotal = r.qty * r.price
                 this.subtotal += r.subtotal
             })
+
             this.total = this.subtotal - this.discount + this.shipping
         },
 

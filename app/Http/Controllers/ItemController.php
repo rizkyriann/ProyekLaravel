@@ -24,7 +24,7 @@ class ItemController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('sku', 'like', "%{$search}%")
                   ->orWhereHas('handoverItems', function ($hq) use ($search) {
-                      $hq->where('item_name', 'like', "%{$search}%");
+                      $hq->where('name', 'like', "%{$search}%");
                   });
             });
         }
@@ -80,7 +80,7 @@ class ItemController extends Controller
             ->where(function ($q) use ($request) {
                 $q->where('sku', 'like', "%{$request->q}%")
                   ->orWhereHas('handoverItem', function ($hq) use ($request) {
-                      $hq->where('item_name', 'like', "%{$request->q}%");
+                      $hq->where('name', 'like', "%{$request->q}%");
                   });
             })
             ->limit(10)

@@ -92,7 +92,7 @@ class HandoverController extends Controller
                     'handover_id'      => $handover->id,
                     'handover_item_id' => $detail->id,
                     'sku'              => $detail->sku,
-                    'name'             => $detail->item_name,
+                    'name'             => $detail->name,
                     'quantity'         => $detail->quantity,
                     'price'            => $detail->price,
                     'status'           => 'active',

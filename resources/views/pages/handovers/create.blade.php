@@ -92,7 +92,7 @@
                     <!-- NAMA BARANG -->
                     <input
                         type="text"
-                        :name="`items[${index}][item_name]`"
+                        :name="`items[${index}][name]`"
                         placeholder="  Nama Barang"
                         class="input col-span-2 text-gray-800 dark:text-white/90 bg-transparent"
                         x-model="row.name"
