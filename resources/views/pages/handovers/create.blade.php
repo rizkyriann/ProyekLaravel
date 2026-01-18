@@ -10,6 +10,7 @@
         Tambah Handover (Barang Masuk)
     </h2>
 
+    <div x-data="handoverForm()" x-init="init()">
     <form method="POST" action="{{ route('warehouse.handovers.store') }}">
         @csrf
 
@@ -176,7 +177,7 @@
                 Simpan Handover
             </x-ui.button>
         </div>
-
+    </div>
     </form>
 </div>
 
@@ -184,25 +185,35 @@
 <script>
 function handoverForm() {
     return {
-        rows: [
-            {
-                sku: '',
-                skuError: false,
-                name: '',
-                qty: '',
-                price: '',
-                subtotal: 0
-            }
-        ],
+        rows: [],
         total: 0,
+
+        generateSku() {
+            const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
+            const numbers = '23456789'
+
+            const randomLetters = [...Array(3)]
+                .map(() => letters[Math.floor(Math.random() * letters.length)])
+                .join('')
+
+            const randomNumbers = [...Array(3)]
+                .map(() => numbers[Math.floor(Math.random() * numbers.length)])
+                .join('')
+
+            return `${randomLetters}-${randomNumbers}`
+        },
+
+        init() {
+            // AUTO GENERATE SKU SAAT PAGE LOAD
+            this.add()
+        },
 
         add() {
             this.rows.push({
-                sku: '',
-                skuError: false,
+                sku: this.generateSku(),
                 name: '',
-                qty: '',
-                price: '',
+                quantity: 1,
+                price: 0,
                 subtotal: 0
             })
         },
@@ -215,29 +226,9 @@ function handoverForm() {
         calc() {
             this.total = 0
             this.rows.forEach(row => {
-                row.subtotal = (row.qty || 0) * (row.price || 0)
+                row.subtotal = (row.quantity || 0) * (row.price || 0)
                 this.total += row.subtotal
             })
-        },
-
-        async checkSku(index) {
-            const sku = this.rows[index].sku
-            if (!sku) return
-
-            try {
-                const res = await fetch(
-                    `{{ route('warehouse.warehouse.check-sku') }}?sku=${sku}`
-                )
-                const data = await res.json()
-                this.rows[index].skuError = data.exists
-            } catch (e) {
-                console.error(e)
-                this.rows[index].skuError = false
-            }
-        },
-
-        get hasSkuError() {
-            return this.rows.some(row => row.skuError === true)
         },
 
         rupiah(val) {
@@ -249,4 +240,6 @@ function handoverForm() {
     }
 }
 </script>
+
+
 @endsection

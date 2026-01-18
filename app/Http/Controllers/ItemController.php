@@ -18,16 +18,14 @@ class ItemController extends Controller
             ->where('status', 'active');
 
         // Search
-        if ($request->filled('q')) {
+        $query->when($request->filled('q'), function ($q) use ($request) {
             $search = $request->q;
 
-            $query->where(function ($q) use ($search) {
-                $q->where('sku', 'like', "%{$search}%")
-                  ->orWhereHas('handoverItems', function ($hq) use ($search) {
-                      $hq->where('name', 'like', "%{$search}%");
-                  });
+            $q->where(function ($qq) use ($search) {
+                $qq->where('sku', 'LIKE', "%{$search}%")
+                ->orWhere('name', 'LIKE', "%{$search}%");
             });
-        }
+        });
 
         // Pagination
         $items = $query

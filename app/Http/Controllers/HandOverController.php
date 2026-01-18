@@ -62,7 +62,7 @@ class HandoverController extends Controller
             foreach ($data['items'] as $itemData) {
                 $handover->handoverItems()->create([
                     'sku'       => $itemData['sku'],
-                    'name' => $itemData['name'],
+                    'name'      => $itemData['name'],
                     'quantity'  => $itemData['quantity'],
                     'price'     => $itemData['price'],
                 ]);
@@ -182,6 +182,22 @@ class HandoverController extends Controller
             : 1;
 
         return "HO-$date-" . str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
+
+    private function generateSkuSimple()
+    {
+        do {
+            // 3 huruf A–Z
+            $letters = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 3));
+
+            // 3 angka 0–9
+            $numbers = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
+
+            $sku = $letters . '-' . $numbers;
+
+        } while (Item::where('sku', $sku)->exists());
+
+        return $sku;
     }
 
 }

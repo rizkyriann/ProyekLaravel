@@ -33,17 +33,17 @@
             </thead>
             <tbody>
                 @forelse ($items as $item)
-                    <tr class="border-t dark:border-gray-800 text-center">
-                        <td class="px-5 py-4 text-sm">
+                    <tr class="divide-y divide-gray-100 dark:divide-gray-800 hover:bg-gray-50 dark:hover:bg-white/[0.04]">
+                        <td class="px-5 py-4 text-sm text-center dark:text-gray-400">
                             {{ $item->sku }}
                         </td>
-                        <td class="px-5 py-4 text-sm text-center">
+                        <td class="px-5 py-4 text-sm text-center dark:text-gray-400">
                             {{ $item->name }}
                         </td>
-                        <td class="px-5 py-4 text-sm text-center">
+                        <td class="px-5 py-4 text-sm text-center dark:text-gray-400">
                             {{ \Carbon\Carbon::parse($item->handover->handover_date)->format('d-m-Y') }}
                         </td>
-                        <td class="px-5 py-4 text-sm text-center font-semibold">
+                        <td class="px-5 py-4 text-sm text-center dark:text-gray-400 font-semibold">
                             {{ $item->quantity }}
                         </td>
                         <td class="px-5 py-4 text-center">
@@ -59,7 +59,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="px-5 py-6 text-center text-sm text-gray-500">
+                        <td colspan="4" class="px-5 py-6 text-center text-sm text-gray-500 dark:text-gray-400">
                             Data tidak ditemukan
                         </td>
                     </tr>

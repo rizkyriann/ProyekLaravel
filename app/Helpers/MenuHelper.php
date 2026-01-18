@@ -43,19 +43,19 @@ class MenuHelper
                     [
                         'name' => 'Handover',
                         'icon' => 'handover',
-                        'path' => 'warehouse/handover',
+                        'path' => '/warehouse/handovers',
                         'roles' => ['superadmin', 'admin']
                     ],
                     [
                         'name' => 'Stok Gudang',
                         'icon' => 'warehouse',
-                        'path' => 'warehouse/items',
+                        'path' => '/warehouse/items',
                         'roles' => ['superadmin', 'admin']
                     ],
                     [
                         'name' => 'Invoice',
                         'icon' => 'invoice',
-                        'path' => 'warehouse/invoice',
+                        'path' => '/warehouse/invoices',
                         'roles' => ['superadmin', 'admin']
                     ]
                 ]
@@ -69,28 +69,6 @@ class MenuHelper
                         'icon'  => 'users',
                         'path'  => '/admin/employees',
                         'roles' => ['superadmin', 'admin'],
-                    ],
-                    [
-                        'name'  => 'Manajemen Gudang',
-                        'icon'  => 'warehouse',
-                        'roles' => ['superadmin', 'admin'],
-                        'subItems' => [
-                            [
-                                'name'  => 'Daftar Handover',
-                                'path'  => '/warehouse/handovers',
-                                'roles' => ['superadmin', 'admin'],
-                            ],
-                            [
-                                'name'  => 'Daftar Barang',
-                                'path'  => '/warehouse/items',
-                                'roles' => ['superadmin', 'admin'],
-                            ],
-                            [
-                                'name'  => 'Daftar Invoice',
-                                'path'  => '/warehouse/invoices',
-                                'roles' => ['superadmin', 'admin'],
-                            ],
-                        ],
                     ],
                 ],
             ],

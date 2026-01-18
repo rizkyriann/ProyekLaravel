@@ -63,6 +63,9 @@ Route::middleware(['auth', 'role:admin,superadmin'])
         Route::delete('invoices/{invoice}', [InvoiceController::class, 'destroy'])
             ->name('invoices.destroy');
 
+        Route::put('invoices/{invoice}/confirm', [InvoiceController::class, 'markAsPaid'])
+            ->name('invoices.confirm');
+
         //ROUTE HANDOVER
         Route::get('handovers', [HandoverController::class, 'index'])
             ->name('handovers.index');

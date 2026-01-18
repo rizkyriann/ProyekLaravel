@@ -89,8 +89,6 @@ class InvoiceController extends Controller
                         'subtotal' => $row['quantity'] * $item->price,
                     ]);
 
-                    // kurangi stok
-                    $item->decrement('quantity', $row['quantity']);
                 }
             });
 
@@ -104,6 +102,45 @@ class InvoiceController extends Controller
                 ->with('error', $e->getMessage());
         }
     }
+
+    /**
+     * Konfirmasi & Paid Invoice (STOCK OUT)
+     */
+    public function markAsPaid(Invoice $invoice)
+    {
+        if ($invoice->status !== 'draft') {
+            return back()->with('error', 'Invoice sudah diproses.');
+        }
+
+        try {
+            DB::transaction(function () use ($invoice) {
+
+                foreach ($invoice->items as $row) {
+                    $item = Item::lockForUpdate()->findOrFail($row->item_id);
+
+                    if ($item->quantity < $row->quantity) {
+                        throw new \Exception(
+                            "Stok {$item->name} tidak mencukupi"
+                        );
+                    }
+
+                    // kurangi stok
+                    $item->decrement('quantity', $row->quantity);
+                }
+
+                $invoice->update([
+                    'status' => 'paid',
+                    'paid_at' => now(),
+                ]);
+            });
+
+            return back()->with('success', 'Invoice berhasil dikonfirmasi & dibayar');
+
+        } catch (\Throwable $e) {
+            return back()->with('error', $e->getMessage());
+        }
+    }
+
 
     /**
      * Detail invoice
