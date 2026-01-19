@@ -94,7 +94,7 @@
                     <!-- NAMA BARANG -->
                     <input
                         type="text"
-                        :name="`items[${index}][name]`"
+                        :name="`items[${index}][item_name]`"
                         placeholder="  Nama Barang"
                         class="input col-span-2 text-gray-800 dark:text-white/90 bg-transparent"
                         x-model="row.name"
@@ -108,7 +108,7 @@
                         :name="`items[${index}][quantity]`"
                         placeholder="  Qty"
                         class="input text-gray-800 dark:text-white/90 bg-transparent"
-                        x-model.number="row.qty"
+                        x-model.number="row.quantity"
                         @input="calc()"
                         required
                     >

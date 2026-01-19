@@ -24,6 +24,7 @@
         <table class="w-full border-collapse bg-white dark:bg-gray-900">
             <thead>
                 <tr class="bg-gray-100 dark:bg-gray-800 text-center sm:px-6">
+                    <th class="font-medium text-gray-500 dark:text-gray-400 px-5 py-2 w-12">No</th>
                     <th class="font-medium text-gray-500 dark:text-gray-400 px-5 py-2">SKU</th>
                     <th class="font-medium text-gray-500 dark:text-gray-400 px-5 py-2">Nama Barang</th>
                     <th class="font-medium text-gray-500 dark:text-gray-400 px-5 py-2">Tanggal Masuk</th>
@@ -34,6 +35,9 @@
             <tbody>
                 @forelse ($items as $item)
                     <tr class="divide-y divide-gray-100 dark:divide-gray-800 hover:bg-gray-50 dark:hover:bg-white/[0.04]">
+                        <td class="px-5 py-4 text-sm text-center dark:text-gray-400">
+                            {{ $items->firstItem() + $loop->index }}
+                        </td>
                         <td class="px-5 py-4 text-sm text-center dark:text-gray-400">
                             {{ $item->sku }}
                         </td>

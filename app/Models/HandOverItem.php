@@ -15,7 +15,7 @@ class HandoverItem extends Model
     protected $fillable = [
         'handover_id',
         'sku',
-        'name',
+        'item_name',
         'quantity',
         'price',
         'notes'

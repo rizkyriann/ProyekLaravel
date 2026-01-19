@@ -37,7 +37,7 @@ class HandoverController extends Controller
                 'source' => 'required|string',
                 'handover_date' => 'required|date',
                 'items' => 'required|array|min:1',
-                'items.*.name' => 'required|string',
+                'items.*.item_name' => 'required|string',
                 'items.*.sku' => 'required|string|distinct',
                 'items.*.quantity' => 'required|integer|min:1',
                 'items.*.price' => 'required|numeric|min:0',
@@ -61,10 +61,10 @@ class HandoverController extends Controller
             // DETAIL (DOKUMEN SAJA)
             foreach ($data['items'] as $itemData) {
                 $handover->handoverItems()->create([
-                    'sku'       => $itemData['sku'],
-                    'name'      => $itemData['name'],
-                    'quantity'  => $itemData['quantity'],
-                    'price'     => $itemData['price'],
+                    'sku'            => $itemData['sku'],
+                    'item_name'      => $itemData['item_name'],
+                    'quantity'       => $itemData['quantity'],
+                    'price'          => $itemData['price'],
                 ]);
             }
         });
@@ -92,7 +92,7 @@ class HandoverController extends Controller
                     'handover_id'      => $handover->id,
                     'handover_item_id' => $detail->id,
                     'sku'              => $detail->sku,
-                    'name'             => $detail->name,
+                    'name'             => $detail->item_name,
                     'quantity'         => $detail->quantity,
                     'price'            => $detail->price,
                     'status'           => 'active',
