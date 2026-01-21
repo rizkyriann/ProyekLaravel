@@ -7,6 +7,7 @@ use App\Models\InvoiceItem;
 use App\Models\Item;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class InvoiceController extends Controller
 {
@@ -28,7 +29,11 @@ class InvoiceController extends Controller
     {
         // hanya item dengan stok tersedia
         $items = Item::where('quantity', '>', 0)->get();
-        return view('pages.invoices.create', compact('items'));
+
+        return view('pages.invoices.create', [
+            'items' => $items,
+            'invoiceNo' => $this->generateInvoiceNo()
+        ]);
     }
 
     /**
@@ -40,12 +45,12 @@ class InvoiceController extends Controller
         // VALIDASI REQUEST
         // ======================
         $request->validate([
-            'invoice_no' => 'required|string|unique:invoices,invoice_no',
-            'date' => 'required|date',
-            'customer' => 'required|string',
-            'items' => 'required|array|min:1',
-            'items.*.item_id' => 'required|exists:items,id',
-            'items.*.quantity' => 'required|integer|min:1',
+            'date'              => 'required|date',
+            'customer'          => 'required|string',
+            'items'             => 'required|array|min:1',
+            'items.*.item_id'   => 'required|exists:items,id',
+            'items.*.price'     => 'required|numeric|min:0',
+            'items.*.quantity'  => 'required|integer|min:1',
         ]);
 
         try {
@@ -68,11 +73,11 @@ class InvoiceController extends Controller
                 // SIMPAN INVOICE
                 // ======================
                 $invoice = Invoice::create([
-                    'invoice_no' => $request->invoice_no,
-                    'date' => $request->date,
-                    'customer' => $request->customer,
-                    'total' => $request->total,
-                    'status' => 'draft',
+                    'invoice_no'    => $this->generateInvoiceNo(),
+                    'date'          => $request->date,
+                    'customer'      => $request->customer,
+                    'total'         => $request->total,
+                    'status'        => 'draft',
                 ]);
 
                 // ======================
@@ -82,11 +87,11 @@ class InvoiceController extends Controller
                     $item = Item::lockForUpdate()->findOrFail($row['item_id']);
 
                     InvoiceItem::create([
-                        'invoice_id' => $invoice->id,
-                        'item_id' => $item->id,
-                        'quantity' => $row['quantity'],
-                        'price' => $item->price, // harga dari DB
-                        'subtotal' => $row['quantity'] * $item->price,
+                        'invoice_id'    => $invoice->id,
+                        'item_id'       => $item->id,
+                        'quantity'      => $row['quantity'],
+                        'price'         => $item->price, // harga dari DB
+                        'subtotal'      => $row['quantity'] * $item->price,
                     ]);
 
                 }
@@ -177,6 +182,22 @@ class InvoiceController extends Controller
             return back()->with('error', $e->getMessage());
         }
     }
+
+    private function generateInvoiceNo()
+    {
+        $date = Carbon::now()->format('Ym');
+
+        $last = Invoice::where('invoice_no', 'like', "INVOICE-$date%")
+            ->latest('id')
+            ->first();
+
+        $number = $last
+            ? intval(substr($last->invoice_no, -4)) + 1
+            : 1;
+
+        return "INVOICE-$date-" . str_pad($number, 4, '0', STR_PAD_LEFT);
+    }
+
 
     /**
      * Soft delete invoice (TANPA rollback stok)
