@@ -54,7 +54,7 @@
 
             <template x-for="(row, index) in rows" :key="index">
                 <div class="mb-3 rounded-lg border border-gray-100 p-3 dark:border-gray-700">
-                    <div class="grid grid-cols-1 gap-3 md:grid-cols-6 md:items-center">
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-7 md:items-center">
 
                         <!-- SEARCHABLE ITEM -->
                         <div class="relative md:col-span-2" @click.outside="row.open = false">
@@ -88,8 +88,9 @@
                                         <div class="font-medium text-gray-800 dark:text-white">
                                             <span x-text="item.name"></span>
                                         </div>
-                                        <div class="text-xs text-gray-500">
+                                        <div class="text-xs text-gray-500 gap-6">
                                             Stok: <span x-text="item.quantity"></span>
+                                            SKU: <span x-text="item.sku"></span>
                                         </div>
                                     </div>
                                 </template>
@@ -109,18 +110,25 @@
 
                         <!-- QTY -->
                         <input type="number"
+                               style="px-3 py-2"
                                min="1"
                                :max="row.maxQty"
                                :disabled="!row.item_id"
                                class="input"
-                               placeholder="Qty"
+                               placeholder="Quantity"
                                x-model.number="row.qty"
                                :name="`items[${index}][quantity]`"
                                @input="calc()"
                                required>
 
-                        <!-- PRICE -->
+                        <!-- STOCK -->
                         <div class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700
+                                    dark:bg-gray-800 dark:text-gray-300 text-center">
+                            <span x-text="row.stock"></span>
+                        </div>
+
+                        <!-- PRICE -->
+                        <div class="rounded-md px-3 py-2 text-sm text-gray-700
                                     dark:bg-gray-800 dark:text-gray-300">
                             <input
                                 type="number"
@@ -213,8 +221,9 @@ function invoiceForm(items) {
             item_id: '',
             search: '',
             open: false,
-            qty: 1,
+            qty: '',
             price: 0,
+            stock: 0,
             subtotal: 0,
             maxQty: 1
         }],
@@ -229,8 +238,9 @@ function invoiceForm(items) {
                 item_id: '',
                 search: '',
                 open: false,
-                qty: 1,
+                qty: '',
                 price: 0,
+                stock: 0,
                 subtotal: 0,
                 maxQty: 1
             })
@@ -244,8 +254,9 @@ function invoiceForm(items) {
         updateItem(row) {
             const item = this.items.find(i => i.id == row.item_id)
             row.price = item ? item.price : 0
-            row.maxQty = item ? item.quantity : 1
-            row.qty = 1
+            row.stock = item ? item.quantity : 0
+            row.maxQty = row.stock
+            row.qty = ''
             this.calc()
         },
 
