@@ -18,7 +18,7 @@
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div>
                     <label class="mb-1 block text-sm text-gray-500">Invoice No</label>
-                    <input class="input bg-gray-100 dark:bg-gray-800"
+                    <input class="input bg-gray-100 dark:bg-gray-800 dark:text-gray-300 px-3 py-2"
                            name="invoice_no"
                            value="{{ $invoiceNo }}"
                            readonly>
@@ -28,14 +28,14 @@
                     <label class="mb-1 block text-sm text-gray-500">Tanggal</label>
                     <input type="date"
                            name="date"
-                           class="input"
+                           class="input dark:text-gray-300 px-3 py-2"
                            value="{{ old('date', now()->format('Y-m-d')) }}"
                            required>
                 </div>
 
                 <div class="md:col-span-2">
                     <label class="mb-1 block text-sm text-gray-500">Customer</label>
-                    <input class="input"
+                    <input class="input dark:text-gray-300 px-3 py-2"
                            name="customer"
                            placeholder="Nama customer"
                            required>
@@ -60,7 +60,7 @@
                         <div class="relative md:col-span-2" @click.outside="row.open = false">
                             <input
                                 type="text"
-                                class="input"
+                                class="input dark:text-gray-300"
                                 placeholder="Cari barang..."
                                 x-model="row.search"
                                 @focus="row.open = true"
@@ -72,7 +72,7 @@
                                  x-transition
                                  class="absolute z-30 mt-1 max-h-60 w-full overflow-auto
                                         rounded-lg border border-gray-200 bg-white shadow-lg
-                                        dark:border-gray-700 dark:bg-gray-800">
+                                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
 
                                 <template x-for="item in filteredItems(row.search)" :key="item.id">
                                     <div
@@ -96,7 +96,7 @@
                                 </template>
 
                                 <div x-show="filteredItems(row.search).length === 0"
-                                     class="px-3 py-2 text-sm text-gray-500">
+                                     class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300">
                                     Barang tidak ditemukan
                                 </div>
                             </div>
@@ -114,7 +114,7 @@
                                min="1"
                                :max="row.maxQty"
                                :disabled="!row.item_id"
-                               class="input"
+                               class="input dark:text-gray-300"
                                placeholder="Quantity"
                                x-model.number="row.qty"
                                :name="`items[${index}][quantity]`"
@@ -133,7 +133,7 @@
                             <input
                                 type="number"
                                 min="0"
-                                class="input text-right"
+                                class="input text-center dark:text-gray-300"
                                 x-model.number="row.price"
                                 :name="`items[${index}][price]`"
                                 @input="calc()"
@@ -142,7 +142,7 @@
                         </div>
 
                         <!-- SUBTOTAL -->
-                        <div class="rounded-md bg-primary/10 px-3 py-2 text-sm font-semibold text-primary">
+                        <div class="rounded-md bg-primary/10 px-3 py-2 text-sm font-semibold text-primary dark:text-gray-300 text-center">
                             <span x-text="rupiah(row.subtotal)"></span>
                         </div>
 
@@ -160,7 +160,11 @@
 
             <button type="button"
                     @click="add()"
-                    class="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-white">
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md
+                            hover:bg-primary hover:text-black
+                            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1
+                            transition dark:border-gray-800 dark:bg-white/[0.03] dark:hover:bg-primary dark:hover:text-white
+                            ">
                 + Tambah Barang
             </button>
         </div>
