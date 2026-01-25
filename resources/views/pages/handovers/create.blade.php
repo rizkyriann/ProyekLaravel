@@ -4,13 +4,13 @@
 <div
     class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10"
     x-data="handoverForm()"
->
+    x-init="init()">
 
     <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
         Tambah Handover (Barang Masuk)
     </h2>
 
-    <div x-data="handoverForm()" x-init="init()">
+    <div>
     <form method="POST" action="{{ route('warehouse.handovers.store') }}">
         @csrf
 
@@ -205,7 +205,9 @@ function handoverForm() {
 
         init() {
             // AUTO GENERATE SKU SAAT PAGE LOAD
+            if (this.rows.length === 0) {
             this.add()
+            }
         },
 
         add() {
