@@ -1,41 +1,44 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10"
+<div class="page-shell"
      x-data="invoiceForm({{ $items->toJson() }})">
 
     <!-- Title -->
-    <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
-        Buat Invoice
-    </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Buat Invoice</h2>
+            <p class="page-subtitle">Pilih barang dari stok aktif. Total dihitung otomatis dari harga dan quantity.</p>
+        </div>
+        <a href="{{ route('warehouse.invoices.index') }}" class="table-action">Kembali</a>
+    </div>
 
-    <form method="POST" action="{{ route('warehouse.invoices.store') }}">
+    <form method="POST" action="{{ route('warehouse.invoices.store') }}" class="space-y-5">
         @csrf
 
         <!-- HEADER CARD -->
-        <div class="mb-6 rounded-xl border border-gray-200 bg-white p-5 shadow-sm
-                    dark:border-gray-800 dark:bg-white/[0.03]">
+        <div class="ui-card ui-card-body">
             <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
                 <div>
-                    <label class="mb-1 block text-sm text-gray-500">Invoice No</label>
-                    <input class="input bg-gray-100 dark:bg-gray-800 dark:text-gray-300 px-3 py-2"
+                    <label class="form-label">Invoice No</label>
+                    <input class="input cursor-not-allowed bg-slate-100"
                            name="invoice_no"
                            value="{{ $invoiceNo }}"
                            readonly>
                 </div>
 
                 <div>
-                    <label class="mb-1 block text-sm text-gray-500">Tanggal</label>
+                    <label class="form-label">Tanggal</label>
                     <input type="date"
                            name="date"
-                           class="input dark:text-gray-300 px-3 py-2"
+                           class="input"
                            value="{{ old('date', now()->format('Y-m-d')) }}"
                            required>
                 </div>
 
                 <div class="md:col-span-2">
-                    <label class="mb-1 block text-sm text-gray-500">Customer</label>
-                    <input class="input dark:text-gray-300 px-3 py-2"
+                    <label class="form-label">Customer</label>
+                    <input class="input"
                            name="customer"
                            placeholder="Nama customer"
                            required>
@@ -45,21 +48,20 @@
         </div>
 
         <!-- ITEMS -->
-        <div class="rounded-xl border border-gray-200 bg-white p-5 shadow-sm
-                    dark:border-gray-800 dark:bg-white/[0.03]">
-            <h3 class="mb-4 font-semibold text-gray-800 dark:text-white/90">
+        <div class="ui-card ui-card-body">
+            <h3 class="mb-4 text-lg font-bold text-slate-900">
                 Barang Keluar
             </h3>
 
             <template x-for="(row, index) in rows" :key="index">
-                <div class="mb-3 rounded-lg border border-gray-100 p-3 dark:border-gray-700">
+                <div class="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
                     <div class="grid grid-cols-1 gap-3 md:grid-cols-7 md:items-center">
 
                         <!-- SEARCHABLE ITEM -->
                         <div class="relative md:col-span-2" @click.outside="row.open = false">
                             <input
                                 type="text"
-                                class="input dark:text-gray-300"
+                                class="input input-sm"
                                 placeholder="Cari barang..."
                                 x-model="row.search"
                                 @focus="row.open = true"
@@ -70,8 +72,7 @@
                             <div x-show="row.open"
                                  x-transition
                                  class="absolute z-30 mt-1 max-h-60 w-full overflow-auto
-                                        rounded-lg border border-gray-200 bg-white shadow-lg
-                                        dark:border-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                         rounded-xl border border-slate-200 bg-white shadow-lg">
 
                                 <template x-for="item in filteredItems(row.search)" :key="item.id">
                                     <div
@@ -81,13 +82,11 @@
                                             row.open = false;
                                             updateItem(row)
                                         "
-                                        class="cursor-pointer px-3 py-2 text-sm
-                                               hover:bg-primary/10
-                                               dark:hover:bg-primary/20">
-                                        <div class="font-medium text-gray-800 dark:text-white">
+                                        class="cursor-pointer px-3 py-2 text-sm hover:bg-brand-25">
+                                        <div class="font-semibold text-slate-900">
                                             <span x-text="item.name"></span>
                                         </div>
-                                        <div class="text-xs text-gray-500 gap-6">
+                                        <div class="text-xs text-slate-500 gap-6">
                                             Stok: <span x-text="item.quantity"></span>
                                             SKU: <span x-text="item.sku"></span>
                                         </div>
@@ -95,7 +94,7 @@
                                 </template>
 
                                 <div x-show="filteredItems(row.search).length === 0"
-                                     class="px-3 py-2 text-sm text-gray-500 dark:text-gray-300">
+                                     class="px-3 py-2 text-sm text-slate-500">
                                     Barang tidak ditemukan
                                 </div>
                             </div>
@@ -113,7 +112,7 @@
                                min="1"
                                :max="row.maxQty"
                                :disabled="!row.item_id"
-                               class="input dark:text-gray-300"
+                               class="input input-sm"
                                placeholder="Quantity"
                                x-model.number="row.qty"
                                :name="`items[${index}][quantity]`"
@@ -125,18 +124,16 @@
                         </div>
 
                         <!-- STOCK -->
-                        <div class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700
-                                    dark:bg-gray-800 dark:text-gray-300 text-center">
+                        <div class="rounded-xl bg-white px-3 py-2 text-center text-sm font-bold text-slate-700 ring-1 ring-slate-200">
                             <span x-text="row.stock"></span>
                         </div>
 
                         <!-- PRICE -->
-                        <div class="rounded-md px-3 py-2 text-sm text-gray-700
-                                    dark:bg-gray-800 dark:text-gray-300">
+                        <div class="rounded-xl bg-white px-3 py-2 text-sm text-slate-700 ring-1 ring-slate-200">
                             <input
                                 type="number"
                                 min="0"
-                                class="input text-center dark:text-gray-300"
+                                class="input input-sm text-center"
                                 x-model.number="row.price"
                                 readonly
                                 @input="calc()"
@@ -145,16 +142,14 @@
                         </div>
 
                         <!-- SUBTOTAL -->
-                        <div class="rounded-md bg-primary/10 px-3 py-2 text-sm font-semibold text-primary dark:text-gray-300 text-center">
+                        <div class="rounded-xl bg-brand-50 px-3 py-2 text-center text-sm font-bold text-brand-700 ring-1 ring-brand-100">
                             <span x-text="rupiah(row.subtotal)"></span>
                         </div>
 
                         <!-- DELETE -->
                         <button type="button"
                                 @click="remove(index)"
-                                class="h-9 w-9 rounded-md bg-red-500/10 text-red-600
-                                       hover:bg-red-500 hover:text-white transition
-                                       flex items-center justify-center">
+                                class="btn-danger h-10 w-10 px-0">
                             x
                         </button>
                     </div>
@@ -163,28 +158,23 @@
 
             <button type="button"
                     @click="add()"
-                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-primary border border-primary rounded-md
-                            hover:bg-primary hover:text-black
-                            focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-1
-                            transition dark:border-gray-800 dark:bg-white/[0.03] dark:hover:bg-primary dark:hover:text-white
-                            ">
+                    class="table-action">
                 + Tambah Barang
             </button>
         </div>
 
         <!-- SUMMARY -->
         <div class="mt-6 flex justify-end">
-            <div class="w-full max-w-md rounded-xl border border-gray-200 bg-white p-5 shadow-sm
-                        dark:border-gray-800 dark:bg-white/[0.03]">
+            <div class="w-full max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
 
-                <div class="flex justify-between text-sm mb-3 dark:text-gray-400">
+                <div class="flex justify-between text-sm mb-3 text-slate-500">
                     <span>Subtotal</span>
                     <span x-text="rupiah(subtotal)"></span>
                 </div>
 
-                <hr class="my-4 dark:border-gray-700">
+                <hr class="my-4 border-slate-200">
 
-                <div class="flex justify-between text-lg font-semibold text-gray-800 dark:text-white">
+                <div class="flex justify-between text-lg font-bold text-slate-900">
                     <span>Total</span>
                     <span x-text="rupiah(total)"></span>
                 </div>
@@ -194,7 +184,7 @@
         <!-- SUBMIT -->
         <div class="mt-6 flex justify-end">
             <button
-                class="rounded-lg bg-primary px-6 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+                class="inline-flex min-h-11 items-center justify-center rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 disabled:cursor-not-allowed disabled:opacity-50"
                 :disabled="!canSubmit">
                 Simpan Invoice
             </button>

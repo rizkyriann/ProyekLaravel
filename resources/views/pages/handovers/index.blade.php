@@ -1,13 +1,14 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+<div class="page-shell">
 
     <!-- Header -->
-    <div class="mb-6 flex justify-between items-center">
-        <h2 class="text-title-md2 font-semibold text-gray-800 dark:text-white/90">
-            Data Handover (Barang Masuk)
-        </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Data Handover</h2>
+            <p class="page-subtitle">Kelola dokumen barang masuk sebelum dikonfirmasi menjadi stok gudang.</p>
+        </div>
 
         <a href="{{ route('warehouse.handovers.create') }}">
             <x-ui.button size="md" variant="primary">
@@ -17,45 +18,33 @@
     </div>
 
     <!-- Table Wrapper -->
-    <div class="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
-        <div class="max-w-full overflow-x-auto custom-scrollbar">
+    <div class="table-card">
+        <div class="table-scroll custom-scrollbar">
             <table class="w-full min-w-[1100px]">
                 <thead>
-                    <tr class="border bg-gray-100 dark:bg-gray-800 border-gray-200 dark:border-gray-800">
-                        <th class="px-5 py-3 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                No Handover
-                            </p>
+                    <tr>
+                        <th>
+                            No Handover
                         </th>
 
-                        <th class="px-5 py-2 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                Sumber
-                            </p>
+                        <th>
+                            Sumber
                         </th>
 
-                        <th class="px-5 py-2 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                Tanggal
-                            </p>
+                        <th>
+                            Tanggal
                         </th>
 
-                        <th class="px-5 py-2 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                Jumlah Item
-                            </p>
+                        <th>
+                            Jumlah Item
                         </th>
 
-                        <th class="px-5 py-2 text-left sm:px-6">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                Status
-                            </p>
+                        <th>
+                            Status
                         </th>
 
-                        <th class="px-5 py-2 text-center sm:px-6 w-[120px]">
-                            <p class="font-medium text-gray-500 dark:text-gray-400">
-                                Aksi
-                            </p>
+                        <th class="w-[160px] text-center">
+                            Aksi
                         </th>
 
                     </tr>
@@ -63,55 +52,55 @@
 
                 <tbody>
                     @forelse ($handovers as $handover)
-                        <tr class="border-b border-gray-200 dark:border-gray-800">
+                        <tr>
 
                             <!-- No Handover -->
-                            <td class="px-5 py-2 sm:px-6">
-                                <p class="font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                            <td>
+                                <p class="font-bold text-slate-900">
                                     {{ $handover->handover_no }}
                                 </p>
                             </td>
 
                             <!-- Source -->
-                            <td class="px-5 py-2 sm:px-6">
-                                <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                            <td>
+                                <p class="text-slate-600">
                                     {{ $handover->source }}
                                 </p>
                             </td>
 
                             <!-- Date -->
-                            <td class="px-5 py-2 sm:px-6">
-                                <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                            <td>
+                                <p class="text-slate-600">
                                     {{ \Carbon\Carbon::parse($handover->handover_date)->format('d M Y') }}
                                 </p>
                             </td>
 
                             <!-- Total Items -->
-                            <td class="px-5 py-2 sm:px-6">
-                                <p class="text-gray-500 text-theme-sm dark:text-gray-400">
+                            <td>
+                                <p class="font-semibold text-slate-700">
                                     {{ $handover->handoverItems->count() }} item
                                 </p>
                             </td>
 
                             <!-- Status -->
-                            <td class="px-5 py-2 sm:px-6">
-                                <span class="inline-flex rounded-full px-2 py-0.5 text-theme-xs font-medium {{ $handover->status_badge_class }}">
+                            <td>
+                                <span class="status-badge status-{{ $handover->status }}">
                                     {{ ucfirst($handover->status) }}
                                 </span>
                             </td>
 
                             <!-- Action -->
-                            <td class="px-1 py-1 sm:px-6">
+                            <td>
                                 <div class="flex items-center justify-center gap-3">
                                     <!-- Detail -->
                                     <a href="{{ route('warehouse.handovers.show', $handover) }}"
-                                       class="inline-flex items-center justify-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+                                       class="table-action">
                                         Detail
                                     </a>
 
                                     <!--Edit-->
                                     <a href="{{ route('warehouse.handovers.edit', $handover) }}"
-                                       class="inline-flex items-center justify-center rounded-lg bg-primary px-3 py-2 text-xs font-medium text-gray-900 hover:bg-primary/90 dark:text-white">
+                                       class="table-action-primary">
                                         Edit
                                     </a>
                                 </div>
@@ -120,7 +109,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-5 py-8 text-center text-gray-500 dark:text-gray-400">
+                            <td colspan="6" class="py-10 text-center text-sm font-medium text-slate-500">
                                 Data handover belum tersedia
                             </td>
                         </tr>

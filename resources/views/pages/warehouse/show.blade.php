@@ -1,56 +1,59 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-screen-xl p-4 md:p-6 2xl:p-10">
+<div class="page-shell max-w-5xl">
 
-    <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
-        Detail Barang
-    </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Detail Barang</h2>
+            <p class="page-subtitle">Informasi stok, harga, dan sumber barang.</p>
+        </div>
+    </div>
 
-    <div class="rounded-xl border border-gray-200 bg-white p-6 dark:border-gray-800 dark:bg-gray-900">
+    <div class="ui-card ui-card-body">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             <div>
-                <p class="text-sm text-gray-500">Nama Barang</p>
-                <p class="font-semibold dark:text-gray-400"> {{ $item->name }}
+                <p class="text-sm font-semibold text-slate-500">Nama Barang</p>
+                <p class="mt-1 font-bold text-slate-900"> {{ $item->name }}
                 </p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">SKU</p>
-                <p class="font-semibold dark:text-gray-400">{{ $item->sku }}</p>
+                <p class="text-sm font-semibold text-slate-500">SKU</p>
+                <p class="mt-1 font-bold text-slate-900">{{ $item->sku }}</p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Stok Saat Ini</p>
-                <p class="font-semibold text-lg dark:text-gray-400">{{ $item->quantity }}</p>
+                <p class="text-sm font-semibold text-slate-500">Stok Saat Ini</p>
+                <p class="mt-1 text-2xl font-bold text-brand-700">{{ $item->quantity }}</p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Harga Beli</p>
-                <p class="font-semibold dark:text-gray-400">
+                <p class="text-sm font-semibold text-slate-500">Harga Beli</p>
+                <p class="mt-1 font-bold text-slate-900">
                     Rp {{ number_format($item->price, 0, ',', '.') }}
                 </p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Tanggal Masuk</p>
-                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->handover_date ?? '-' }}</p>
+                <p class="text-sm font-semibold text-slate-500">Tanggal Masuk</p>
+                <p class="mt-1 font-bold text-slate-900">{{ optional($item->handover)->handover_date ?? '-' }}</p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Nama Supplier</p>
-                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->source ?? '-' }}</p>
+                <p class="text-sm font-semibold text-slate-500">Nama Supplier</p>
+                <p class="mt-1 font-bold text-slate-900">{{ optional($item->handover)->source ?? '-' }}</p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Nomor Handover</p>
-                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->handover_no ?? '-' }}</p>
+                <p class="text-sm font-semibold text-slate-500">Nomor Handover</p>
+                <p class="mt-1 font-bold text-slate-900">{{ optional($item->handover)->handover_no ?? '-' }}</p>
             </div>
 
             <div>
-                <p class="text-sm text-gray-500">Status</p>
-                <span class="inline-flex rounded-full bg-green-100 px-3 py-1 text-md font-medium text-green-700">
+                <p class="text-sm font-semibold text-slate-500">Status</p>
+                <span class="status-badge status-{{ $item->status }} mt-2">
                     {{ ucfirst($item->status) }}
                 </span>
             </div>

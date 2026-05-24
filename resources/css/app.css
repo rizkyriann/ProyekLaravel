@@ -189,20 +189,129 @@
     cursor: pointer;
   }
   body {
-    @apply relative font-normal font-outfit z-1 bg-gray-50;
+    @apply relative font-normal font-outfit z-1 bg-slate-50 text-slate-800 antialiased;
+    color-scheme: light;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply text-slate-900;
+  }
+
+  table {
+    @apply w-full border-collapse;
+  }
+
+  thead tr {
+    @apply border-b border-slate-200 bg-slate-50;
+  }
+
+  th {
+    @apply px-4 py-3 text-left text-xs font-bold uppercase tracking-wide text-slate-500 sm:px-5;
+  }
+
+  td {
+    @apply border-b border-slate-100 px-4 py-4 text-sm text-slate-700 sm:px-5;
+  }
+
+  tbody tr {
+    @apply transition-colors hover:bg-brand-25/70;
+  }
+}
+
+@layer components {
+  .app-main {
+    min-height: calc(100vh - 96px);
+  }
+
+  .page-shell {
+    @apply mx-auto w-full max-w-7xl space-y-5 sm:space-y-6;
+  }
+
+  .page-header {
+    @apply flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl;
+  }
+
+  .page-subtitle {
+    @apply mt-1 max-w-2xl text-sm leading-6 text-slate-500;
+  }
+
+  .ui-card {
+    @apply rounded-2xl border border-slate-200 bg-white shadow-theme-xs;
+  }
+
+  .ui-card-body {
+    @apply p-4 sm:p-5 lg:p-6;
+  }
+
+  .table-card {
+    @apply overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-theme-xs;
+  }
+
+  .table-scroll {
+    @apply max-w-full overflow-x-auto;
+  }
+
+  .table-action {
+    @apply inline-flex min-h-10 items-center justify-center rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-semibold text-slate-700 shadow-sm transition hover:border-brand-200 hover:bg-brand-25 hover:text-brand-700 focus:outline-none focus:ring-4 focus:ring-brand-500/10;
+  }
+
+  .table-action-primary {
+    @apply inline-flex min-h-10 items-center justify-center rounded-xl bg-brand-500 px-3.5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-500/20;
+  }
+
+  .input {
+    @apply min-h-11 w-full rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-800 shadow-sm outline-none transition placeholder:text-slate-400 focus:border-brand-500 focus:ring-4 focus:ring-brand-500/10 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500;
+  }
+
+  .input-sm {
+    @apply min-h-10 rounded-lg px-3 py-2 text-sm;
+  }
+
+  .form-label {
+    @apply mb-1.5 block text-sm font-semibold text-slate-700;
+  }
+
+  .status-badge {
+    @apply inline-flex items-center rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide;
+  }
+
+  .status-draft {
+    @apply bg-warning-50 text-warning-700 ring-1 ring-warning-200;
+  }
+
+  .status-paid,
+  .status-confirmed,
+  .status-active {
+    @apply bg-success-50 text-success-700 ring-1 ring-success-200;
+  }
+
+  .status-cancelled,
+  .status-inactive {
+    @apply bg-error-50 text-error-700 ring-1 ring-error-200;
+  }
+
+  .btn-danger {
+    @apply inline-flex min-h-10 items-center justify-center rounded-xl bg-error-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-error-600 focus:outline-none focus:ring-4 focus:ring-error-500/20;
   }
 }
 
 @utility menu-item {
-  @apply relative flex items-center w-full gap-3 px-3 py-2 font-medium rounded-lg text-theme-sm;
+  @apply relative flex items-center w-full gap-3 px-3 py-2.5 font-semibold rounded-xl text-theme-sm;
 }
 
 @utility menu-item-active {
-  @apply bg-brand-50 text-brand-500 dark:bg-brand-500/[0.12] dark:text-brand-400;
+  @apply bg-brand-50 text-brand-600 ring-1 ring-brand-100;
 }
 
 @utility menu-item-inactive {
-  @apply text-gray-700 hover:bg-gray-100 group-hover:text-gray-700 dark:text-gray-300 dark:hover:bg-white/5 dark:hover:text-gray-300;
+  @apply text-slate-600 hover:bg-slate-100 group-hover:text-slate-900;
 }
 
 @utility menu-item-icon {
@@ -210,11 +319,11 @@
 }
 
 @utility menu-item-icon-active {
-  @apply text-brand-500 dark:text-brand-400;
+  @apply text-brand-600;
 }
 
 @utility menu-item-icon-inactive {
-  @apply text-gray-500 group-hover:text-gray-700 dark:text-gray-400 dark:group-hover:text-gray-300;
+  @apply text-slate-500 group-hover:text-slate-800;
 }
 
 @utility menu-item-arrow {

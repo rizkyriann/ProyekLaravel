@@ -1,62 +1,67 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+<div class="page-shell">
 
-    <h2 class="mb-4 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
-        Kartu Stok
-    </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Kartu Stok</h2>
+            <p class="page-subtitle">Riwayat barang masuk dari handover dan barang keluar dari invoice paid.</p>
+        </div>
+        <a href="{{ route('warehouse.items.index') }}" class="table-action">Kembali</a>
+    </div>
 
     <!-- Item Info -->
-    <div class="mb-6 rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-gray-900">
-        <p class="font-medium">
+    <div class="ui-card ui-card-body">
+        <p class="font-bold text-slate-900">
             {{ optional($item->handoverItem)->item_name ?? '-' }}
         </p>
-        <p class="text-sm text-gray-500">
+        <p class="mt-1 text-sm font-medium text-slate-500">
             SKU: {{ $item->sku }} | Stok Saat Ini: {{ $item->quantity }}
         </p>
     </div>
 
     <!-- Table -->
-    <div class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
-        <table class="w-full bg-white dark:bg-gray-900">
+    <div class="table-card">
+        <div class="table-scroll">
+        <table class="min-w-[760px]">
             <thead>
-                <tr class="bg-gray-100 dark:bg-gray-800">
-                    <th class="px-5 py-3 text-left text-sm">Tanggal</th>
-                    <th class="px-5 py-3 text-left text-sm">Keterangan</th>
-                    <th class="px-5 py-3 text-right text-sm">Masuk</th>
-                    <th class="px-5 py-3 text-right text-sm">Keluar</th>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Keterangan</th>
+                    <th class="text-right">Masuk</th>
+                    <th class="text-right">Keluar</th>
                 </tr>
             </thead>
             <tbody>
 
                 {{-- Barang Masuk (Handover) --}}
                 @if ($item->handoverItem)
-                    <tr class="border-t dark:border-gray-800">
-                        <td class="px-5 py-4 text-sm">
+                    <tr>
+                        <td>
                             {{ optional($item->handoverItem->handover)->handover_date }}
                         </td>
-                        <td class="px-5 py-4 text-sm">
+                        <td class="font-semibold text-slate-900">
                             Barang Masuk (Handover)
                         </td>
-                        <td class="px-5 py-4 text-right text-sm font-semibold text-green-600">
+                        <td class="text-right text-sm font-bold text-success-700">
                             {{ $item->handoverItem->quantity }}
                         </td>
-                        <td class="px-5 py-4 text-right text-sm">-</td>
+                        <td class="text-right">-</td>
                     </tr>
                 @endif
 
                 {{-- Barang Keluar (Invoice) --}}
                 @foreach ($item->invoiceItems as $row)
-                    <tr class="border-t dark:border-gray-800">
-                        <td class="px-5 py-4 text-sm">
+                    <tr>
+                        <td>
                             {{ optional($row->invoice)->date }}
                         </td>
-                        <td class="px-5 py-4 text-sm">
+                        <td class="font-semibold text-slate-900">
                             Barang Keluar (Invoice)
                         </td>
-                        <td class="px-5 py-4 text-right text-sm">-</td>
-                        <td class="px-5 py-4 text-right text-sm font-semibold text-red-600">
+                        <td class="text-right">-</td>
+                        <td class="text-right text-sm font-bold text-error-700">
                             {{ $row->quantity }}
                         </td>
                     </tr>
@@ -64,6 +69,7 @@
 
             </tbody>
         </table>
+        </div>
     </div>
 
 </div>

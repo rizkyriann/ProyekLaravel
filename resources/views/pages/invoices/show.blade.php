@@ -1,17 +1,18 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+<div class="page-shell">
 
     {{-- HEADER --}}
-    <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h2 class="text-title-md2 font-semibold text-gray-900 dark:text-white">
-            Detail Invoice
-        </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Detail Invoice</h2>
+            <p class="page-subtitle">Ringkasan invoice, status pembayaran, dan item barang keluar.</p>
+        </div>
 
         <div class="flex gap-2">
             <a href="{{ route('warehouse.invoices.index') }}"
-               class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+               class="table-action">
                 Kembali
             </a>
 
@@ -20,7 +21,7 @@
                     @csrf
                     @method('PATCH')
                     <button
-                        class="inline-flex items-center rounded-lg bg-danger px-4 py-2 text-sm font-medium text-white hover:bg-danger/90">
+                        class="btn-danger">
                         Cancel Invoice
                     </button>
                 </form>
@@ -33,7 +34,7 @@
                     @csrf
                     @method('PUT')
                     <button
-                        class="inline-flex items-center rounded-lg bg-success px-4 py-2 text-sm font-medium text-white hover:bg-success/90">
+                        class="inline-flex min-h-10 items-center rounded-xl bg-success-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-success-600">
                         Konfirmasi / Paid
                     </button>
                 </form>
@@ -42,65 +43,58 @@
     </div>
 
     {{-- INFO CARD --}}
-    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
+    <div class="grid grid-cols-1 gap-4 md:grid-cols-4">
 
-        <div class="rounded-xl border border-stroke bg-gray-50 p-4
-                    dark:border-strokedark dark:bg-boxdark">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Invoice No</p>
-            <p class="font-semibold text-gray-900 dark:text-white">
+        <div class="ui-card ui-card-body">
+            <p class="text-sm font-semibold text-slate-500">Invoice No</p>
+            <p class="mt-1 font-bold text-slate-900">
                 {{ $invoice->invoice_no }}
             </p>
         </div>
 
-        <div class="rounded-xl border border-stroke bg-gray-50 p-4
-                    dark:border-strokedark dark:bg-boxdark">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Customer</p>
-            <p class="font-semibold text-gray-900 dark:text-white">
+        <div class="ui-card ui-card-body">
+            <p class="text-sm font-semibold text-slate-500">Customer</p>
+            <p class="mt-1 font-bold text-slate-900">
                 {{ $invoice->customer }}
             </p>
         </div>
 
-        <div class="rounded-xl border border-stroke bg-gray-50 p-4
-                    dark:border-strokedark dark:bg-boxdark">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Tanggal</p>
-            <p class="font-semibold text-gray-900 dark:text-white">
+        <div class="ui-card ui-card-body">
+            <p class="text-sm font-semibold text-slate-500">Tanggal</p>
+            <p class="mt-1 font-bold text-slate-900">
                 {{ \Carbon\Carbon::parse($invoice->date)->format('d-m-Y') }}
             </p>
         </div>
 
-        <div class="rounded-xl border border-stroke bg-gray-50 p-4
-                    dark:border-strokedark dark:bg-boxdark">
-            <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
-            <p class="font-semibold text-gray-900 dark:text-white">
+        <div class="ui-card ui-card-body">
+            <p class="text-sm font-semibold text-slate-500">Status</p>
+            <p class="mt-2">
+                <span class="status-badge status-{{ $invoice->status }}">
                 {{ strtoupper($invoice->status) }}
+                </span>
             </p>
         </div>
 
     </div>
 
     {{-- TABLE --}}
-    <div class="rounded-xl border border-stroke bg-gray-50 shadow-default
-                dark:border-strokedark dark:bg-boxdark">
+    <div class="table-card">
 
         <div class="overflow-x-auto">
             <table class="w-full table-auto">
 
                 <thead>
-                    <tr class="border-b border-stroke dark:border-strokedark">
-                        <th class="px-4 py-3 text-left text-sm font-medium
-                                   text-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th>
                             Barang
                         </th>
-                        <th class="px-4 py-3 text-left text-sm font-medium
-                                   text-gray-700 dark:text-gray-300">
+                        <th>
                             Qty
                         </th>
-                        <th class="px-4 py-3 text-left text-sm font-medium
-                                   text-gray-700 dark:text-gray-300">
+                        <th>
                             Harga
                         </th>
-                        <th class="px-4 py-3 text-left text-sm font-medium
-                                   text-gray-700 dark:text-gray-300">
+                        <th>
                             Subtotal
                         </th>
                     </tr>
@@ -108,19 +102,17 @@
 
                 <tbody>
                     @foreach ($invoice->items as $row)
-                        <tr class="border-b border-stroke dark:border-strokedark
-                                   hover:bg-gray-100 dark:hover:bg-white/5 transition">
-                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                        <tr>
+                            <td class="font-semibold text-slate-900">
                                 {{ $row->item->name }}
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                            <td>
                                 {{ $row->quantity }}
                             </td>
-                            <td class="px-4 py-3 text-sm text-gray-800 dark:text-gray-200">
+                            <td>
                                 Rp {{ number_format($row->price, 0, ',', '.') }}
                             </td>
-                            <td class="px-4 py-3 text-sm font-semibold
-                                       text-gray-900 dark:text-white">
+                            <td class="font-bold text-slate-900">
                                 Rp {{ number_format($row->subtotal, 0, ',', '.') }}
                             </td>
                         </tr>
@@ -129,10 +121,10 @@
 
                 <tfoot>
                     <tr>
-                        <td colspan="3" class="px-4 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
+                        <td colspan="3" class="text-right text-sm font-semibold text-slate-600">
                             Total
                         </td>
-                        <td class="px-4 py-4 text-sm font-bold text-gray-900 dark:text-white">
+                        <td class="text-sm font-bold text-slate-900">
                             Rp {{ number_format($invoice->total, 0, ',', '.') }}
                         </td>
                     </tr>

@@ -8,7 +8,7 @@
 @endphp
 
 <aside id="sidebar"
-    class="fixed flex flex-col mt-0 top-0 px-5 left-0 bg-white dark:bg-gray-900 dark:border-gray-800 text-gray-900 h-screen transition-all duration-300 ease-in-out z-99999 border-r border-gray-200"
+    class="fixed flex flex-col mt-0 top-0 px-4 left-0 bg-white text-slate-900 h-screen transition-all duration-300 ease-in-out z-99999 border-r border-slate-200 shadow-sm"
     x-data="{
         openSubmenus: {},
         init() {
@@ -66,7 +66,7 @@
         <a href="/">
             <div
                 x-show="$store.sidebar.isExpanded || $store.sidebar.isHovered || $store.sidebar.isMobileOpen"
-                class="flex items-center gap-2 dark:text-white"
+                class="flex items-center gap-2 text-slate-900"
 >
                 <!-- SVG Logo -->
                 <svg  xmlns="http://www.w3.org/2000/svg" width="24" height="24"  
@@ -88,7 +88,7 @@
                 @foreach ($menuGroups as $groupIndex => $menuGroup)
                     <div>
                         <!-- Menu Group Title -->
-                        <h2 class="mb-4 text-xs uppercase flex leading-[20px] text-gray-400"
+                        <h2 class="mb-4 text-xs uppercase flex leading-[20px] font-bold tracking-wide text-slate-400"
                             :class="(!$store.sidebar.isExpanded && !$store.sidebar.isHovered && !$store.sidebar.isMobileOpen) ?
                             'lg:justify-center' : 'justify-start'">
                             <template

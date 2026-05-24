@@ -2,27 +2,31 @@
 
 @section('content')
 <div
-    class="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10"
+    class="page-shell"
     x-data="handoverForm()"
     x-init="init()">
 
-    <h2 class="mb-6 text-title-md2 font-semibold text-gray-800 dark:text-white/90">
-        Tambah Handover (Barang Masuk)
-    </h2>
+    <div class="page-header">
+        <div>
+            <h2 class="page-title">Tambah Handover</h2>
+            <p class="page-subtitle">Input barang masuk sebagai draft, lalu konfirmasi saat data sudah benar.</p>
+        </div>
+        <a href="{{ route('warehouse.handovers.index') }}" class="table-action">Kembali</a>
+    </div>
 
-    <form method="POST" action="{{ route('warehouse.handovers.store') }}">
+    <form method="POST" action="{{ route('warehouse.handovers.store') }}" class="space-y-5">
         @csrf
 
         <!-- HEADER -->
-        <div class="mb-6 grid grid-cols-1 gap-6 md:grid-cols-3">
+        <div class="ui-card ui-card-body grid grid-cols-1 gap-4 md:grid-cols-3">
 
             <!-- NO HANDOVER -->
             <div>
-                <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                <label class="form-label">
                     No Handover
                 </label>
                 <input
-                    class="input cursor-not-allowed text-gray-700 dark:text-gray-400 bg-transparent focus:border-primary focus:ring-0"
+                    class="input cursor-not-allowed"
                     name="handover_no"
                     value="{{ $handoverNo }}"
                     readonly
@@ -31,11 +35,11 @@
 
             <!-- SUMBER -->
             <div>
-                <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400">
+                <label class="form-label">
                     Sumber / Supplier
                 </label>
                 <input
-                    class="input text-gray-700 dark:text-gray-400 bg-transparent"
+                    class="input"
                     name="source"
                     placeholder="Sumber / Supplier"
                     required
@@ -44,11 +48,11 @@
 
             <!-- TANGGAL -->
             <div>
-                <label class="mb-2 block text-sm font-medium text-gray-700 dark:text-gray-400 bg-transparent">
+                <label class="form-label">
                     Tanggal
                 </label>
                 <input
-                    class="input text-gray-700 dark:text-gray-400"
+                    class="input"
                     type="date"
                     name="handover_date"
                     value="{{ old('handover_date', now()->format('Y-m-d')) }}"
@@ -60,31 +64,31 @@
 
 
         <!-- ITEMS -->
-        <div class="rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-            <h3 class="mb-4 font-semibold text-gray-800 dark:text-white/90">
+        <div class="ui-card ui-card-body">
+            <h3 class="mb-4 text-lg font-bold text-slate-900">
                 Daftar Barang Masuk
             </h3>
 
             <template x-for="(row, index) in rows" :key="index">
-                <div class="mb-4 rounded-xl border border-gray-100 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-900/40">
+                <div class="mb-4 rounded-2xl border border-slate-200 bg-slate-50 p-3 sm:p-4">
                     <div class="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-start">
 
                     <!-- SKU -->
                     <div class="md:col-span-2">
-                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">SKU</label>
+                        <label class="form-label text-xs">SKU</label>
                         <input
                             type="text"
                             :name="`items[${index}][sku]`"
                             x-model="row.sku"
                             placeholder="SKU"
-                            class="input px-3 w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            class="input input-sm"
                             required
                             @input="
                                 row.sku = row.sku.toUpperCase().replace(/\s+/g,'');
                                 checkSku(index)
                             "
                         >
-                        <p x-show="row.checkingSku" class="mt-1 text-xs text-gray-500">
+                        <p x-show="row.checkingSku" class="mt-1 text-xs text-slate-500">
                             Mengecek SKU...
                         </p>
                         <p
@@ -97,12 +101,12 @@
 
                     <!-- NAMA BARANG -->
                     <div class="md:col-span-4">
-                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Nama Barang</label>
+                        <label class="form-label text-xs">Nama Barang</label>
                         <input
                             type="text"
                             :name="`items[${index}][item_name]`"
                             placeholder="Nama barang"
-                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            class="input input-sm"
                             x-model="row.name"
                             required
                         >
@@ -110,13 +114,13 @@
 
                     <!-- QTY -->
                     <div class="md:col-span-2">
-                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Qty</label>
+                        <label class="form-label text-xs">Qty</label>
                         <input
                             type="number"
                             min="1"
                             :name="`items[${index}][quantity]`"
                             placeholder="Qty"
-                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            class="input input-sm"
                             x-model.number="row.quantity"
                             @input="calc()"
                             required
@@ -125,13 +129,13 @@
 
                     <!-- HARGA -->
                     <div class="md:col-span-2">
-                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Harga</label>
+                        <label class="form-label text-xs">Harga</label>
                         <input
                             type="number"
                             min="0"
                             :name="`items[${index}][price]`"
                             placeholder="Harga"
-                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            class="input input-sm"
                             x-model.number="row.price"
                             @input="calc()"
                             required
@@ -139,8 +143,8 @@
                     </div>
 
                     <!-- SUBTOTAL -->
-                    <div class="md:col-span-1 text-sm font-semibold text-gray-800 dark:text-gray-400">
-                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Subtotal</label>
+                    <div class="md:col-span-1 text-sm font-semibold text-slate-800">
+                        <label class="form-label text-xs">Subtotal</label>
                         <span x-text="rupiah(row.subtotal)"></span>
                     </div>
 
@@ -148,7 +152,7 @@
                     <button
                         type="button"
                         @click="remove(index)"
-                        class="md:col-span-1 h-10 rounded-lg bg-red-500 px-3 text-sm text-white hover:bg-red-600"
+                        class="btn-danger md:col-span-1"
                     >
                         Hapus
                     </button>
@@ -167,12 +171,12 @@
 
         </div>
 
-        <div class="text-sm font-semibold text-gray-800 dark:text-gray-400">
+        <div class="rounded-xl border border-brand-100 bg-brand-25 px-4 py-3 text-sm font-semibold text-brand-700">
                 *) Kode SKU (3 Huruf-3 Angka), Jika SKU sudah digunakan, silakan ganti dengan SKU lain.
         </div>
         <!-- SUMMARY -->
-        <div class="mt-6 max-w-md ml-auto rounded-xl border border-gray-200 bg-white p-4 dark:border-gray-800 dark:bg-white/[0.03]">
-            <div class="flex justify-between font-semibold text-gray-800 dark:text-white/90">
+        <div class="ml-auto max-w-md rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+            <div class="flex justify-between text-lg font-bold text-slate-900">
                 <span>Total Harga</span>
                 <span x-text="rupiah(total)"></span>
             </div>
