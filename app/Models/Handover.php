@@ -1,14 +1,14 @@
 <?php
+
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\HandOverItem;
-use App\Models\Item;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Handover extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'handover_no',
@@ -29,14 +29,11 @@ class Handover extends Model
         };
     }
 
-
-    // Relasi → HandOver memiliki banyak handover_items
     public function handoverItems()
     {
-        return $this->hasMany(HandOverItem::class, 'handover_id');
+        return $this->hasMany(HandoverItem::class, 'handover_id');
     }
 
-    // Relasi → HandOver memiliki banyak Items di stok gudang
     public function stockItems()
     {
         return $this->hasMany(Item::class, 'handover_id');

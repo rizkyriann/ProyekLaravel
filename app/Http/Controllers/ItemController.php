@@ -14,7 +14,7 @@ class ItemController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Item::with(['handoverItems', 'handover'])
+        $query = Item::with(['handoverItem', 'handover'])
             ->where('status', 'active');
 
         // Search
@@ -43,7 +43,7 @@ class ItemController extends Controller
     {
         $item = Item::with([
             'handover',
-            'handoverItems'
+            'handoverItem'
         ])->findOrFail($id);
 
         return view('pages.warehouse.show', compact('item'));
@@ -56,8 +56,12 @@ class ItemController extends Controller
     public function stockCard($id)
     {
         $item = Item::with([
-            'handoverItems.handover',
-            'invoiceItems.invoice'
+            'handoverItem.handover',
+            'invoiceItems' => function ($query) {
+                $query->whereHas('invoice', function ($invoiceQuery) {
+                    $invoiceQuery->where('status', 'paid');
+                })->with('invoice');
+            }
         ])->findOrFail($id);
 
         return view('pages.warehouse.stock-card', compact('item'));
@@ -72,13 +76,13 @@ class ItemController extends Controller
             'q' => 'required|min:2'
         ]);
 
-        $items = Item::with('handoverItems')
+        $items = Item::with('handoverItem')
             ->where('status', 'active')
             ->where('quantity', '>', 0)
             ->where(function ($q) use ($request) {
                 $q->where('sku', 'like', "%{$request->q}%")
                   ->orWhereHas('handoverItem', function ($hq) use ($request) {
-                      $hq->where('name', 'like', "%{$request->q}%");
+                      $hq->where('item_name', 'like', "%{$request->q}%");
                   });
             })
             ->limit(10)

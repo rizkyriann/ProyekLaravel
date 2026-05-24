@@ -41,7 +41,6 @@
                            required>
                 </div>
 
-                <input type="hidden" name="total" :value="total">
             </div>
         </div>
 
@@ -109,8 +108,8 @@
                         </div>
 
                         <!-- QTY -->
-                        <input type="number"
-                               style="px-3 py-2"
+                        <div>
+                            <input type="number"
                                min="1"
                                :max="row.maxQty"
                                :disabled="!row.item_id"
@@ -120,6 +119,10 @@
                                :name="`items[${index}][quantity]`"
                                @input="calc()"
                                required>
+                            <p x-show="row.hasStockError" class="mt-1 text-xs text-red-500">
+                                Quantity melebihi stok tersedia
+                            </p>
+                        </div>
 
                         <!-- STOCK -->
                         <div class="rounded-md bg-gray-100 px-3 py-2 text-sm text-gray-700
@@ -135,7 +138,7 @@
                                 min="0"
                                 class="input text-center dark:text-gray-300"
                                 x-model.number="row.price"
-                                :name="`items[${index}][price]`"
+                                readonly
                                 @input="calc()"
                                 placeholder="Harga"
                             >
@@ -152,7 +155,7 @@
                                 class="h-9 w-9 rounded-md bg-red-500/10 text-red-600
                                        hover:bg-red-500 hover:text-white transition
                                        flex items-center justify-center">
-                            ✕
+                            x
                         </button>
                     </div>
                 </div>
@@ -179,24 +182,6 @@
                     <span x-text="rupiah(subtotal)"></span>
                 </div>
 
-                <div class="flex justify-between items-center text-sm mb-3 dark:text-gray-400">
-                    <span>Diskon</span>
-                    <input type="number"
-                           x-model.number="discount"
-                           @input="calc()"
-                           class="input w-32 text-right"
-                           placeholder="0">
-                </div>
-
-                <div class="flex justify-between items-center text-sm mb-3 dark:text-gray-400">
-                    <span>Shipping</span>
-                    <input type="number"
-                           x-model.number="shipping"
-                           @input="calc()"
-                           class="input w-32 text-right"
-                           placeholder="0">
-                </div>
-
                 <hr class="my-4 dark:border-gray-700">
 
                 <div class="flex justify-between text-lg font-semibold text-gray-800 dark:text-white">
@@ -208,7 +193,9 @@
 
         <!-- SUBMIT -->
         <div class="mt-6 flex justify-end">
-            <button class="rounded-lg bg-primary px-6 py-2 text-white">
+            <button
+                class="rounded-lg bg-primary px-6 py-2 text-white disabled:cursor-not-allowed disabled:opacity-50"
+                :disabled="!canSubmit">
                 Simpan Invoice
             </button>
         </div>
@@ -229,13 +216,17 @@ function invoiceForm(items) {
             price: 0,
             stock: 0,
             subtotal: 0,
-            maxQty: 1
+            maxQty: 1,
+            hasStockError: false
         }],
 
-        discount: 0,
-        shipping: 0,
         subtotal: 0,
         total: 0,
+
+        get canSubmit() {
+            return this.rows.length > 0
+                && this.rows.every(row => row.item_id && row.qty >= 1 && row.qty <= row.maxQty)
+        },
 
         add() {
             this.rows.push({
@@ -246,7 +237,8 @@ function invoiceForm(items) {
                 price: 0,
                 stock: 0,
                 subtotal: 0,
-                maxQty: 1
+                maxQty: 1,
+                hasStockError: false
             })
         },
 
@@ -261,6 +253,7 @@ function invoiceForm(items) {
             row.stock = item ? item.quantity : 0
             row.maxQty = row.stock
             row.qty = ''
+            row.hasStockError = false
             this.calc()
         },
 
@@ -271,6 +264,7 @@ function invoiceForm(items) {
             return this.items
                 .filter(item =>
                     item.name.toLowerCase().includes(keyword)
+                    || item.sku.toLowerCase().includes(keyword)
                 )
                 .slice(0, 20)
         },
@@ -280,8 +274,9 @@ function invoiceForm(items) {
             this.rows.forEach(r => {
                 r.subtotal = r.qty * r.price
                 this.subtotal += r.subtotal
+                r.hasStockError = r.item_id && r.qty > r.maxQty
             })
-            this.total = this.subtotal - this.discount + this.shipping
+            this.total = this.subtotal
         },
 
         rupiah(val) {

@@ -3,13 +3,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Models\Handover;
-use App\Models\HandOverItem;
-use App\Models\InvoiceItem;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Item extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $fillable = [
         'sku',
@@ -26,9 +24,14 @@ class Item extends Model
         return $this->belongsTo(Handover::class);
     }
 
+    public function handoverItem()
+    {
+        return $this->belongsTo(HandoverItem::class, 'handover_item_id');
+    }
+
     public function handoverItems()
     {
-        return $this->hasOne(HandOverItem::class, 'handover_id');
+        return $this->hasMany(HandoverItem::class, 'handover_id', 'handover_id');
     }
 
     public function invoiceItems()

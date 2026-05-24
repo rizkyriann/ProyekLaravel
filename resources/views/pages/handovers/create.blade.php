@@ -10,7 +10,6 @@
         Tambah Handover (Barang Masuk)
     </h2>
 
-    <div>
     <form method="POST" action="{{ route('warehouse.handovers.store') }}">
         @csrf
 
@@ -67,22 +66,27 @@
             </h3>
 
             <template x-for="(row, index) in rows" :key="index">
-                <div class="mb-3 grid grid-cols-7 gap-3 items-center">
+                <div class="mb-4 rounded-xl border border-gray-100 bg-gray-50 p-3 dark:border-gray-800 dark:bg-gray-900/40">
+                    <div class="grid grid-cols-1 gap-3 md:grid-cols-12 md:items-start">
 
                     <!-- SKU -->
-                    <div class="col-span-1">
+                    <div class="md:col-span-2">
+                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">SKU</label>
                         <input
                             type="text"
                             :name="`items[${index}][sku]`"
                             x-model="row.sku"
                             placeholder="SKU"
-                            class="input px-3 w-full text-gray-800 dark:text-white/90 bg-transparent"
+                            class="input px-3 w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
                             required
                             @input="
                                 row.sku = row.sku.toUpperCase().replace(/\s+/g,'');
                                 checkSku(index)
                             "
                         >
+                        <p x-show="row.checkingSku" class="mt-1 text-xs text-gray-500">
+                            Mengecek SKU...
+                        </p>
                         <p
                             x-show="row.skuError"
                             class="mt-1 text-xs text-red-500"
@@ -92,41 +96,51 @@
                     </div>
 
                     <!-- NAMA BARANG -->
-                    <input
-                        type="text"
-                        :name="`items[${index}][item_name]`"
-                        placeholder="  Nama Barang"
-                        class="input col-span-2 text-gray-800 dark:text-white/90 bg-transparent"
-                        x-model="row.name"
-                        required
-                    >
+                    <div class="md:col-span-4">
+                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Nama Barang</label>
+                        <input
+                            type="text"
+                            :name="`items[${index}][item_name]`"
+                            placeholder="Nama barang"
+                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            x-model="row.name"
+                            required
+                        >
+                    </div>
 
                     <!-- QTY -->
-                    <input
-                        type="number"
-                        min="1"
-                        :name="`items[${index}][quantity]`"
-                        placeholder="  Qty"
-                        class="input text-gray-800 dark:text-white/90 bg-transparent"
-                        x-model.number="row.quantity"
-                        @input="calc()"
-                        required
-                    >
+                    <div class="md:col-span-2">
+                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Qty</label>
+                        <input
+                            type="number"
+                            min="1"
+                            :name="`items[${index}][quantity]`"
+                            placeholder="Qty"
+                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            x-model.number="row.quantity"
+                            @input="calc()"
+                            required
+                        >
+                    </div>
 
                     <!-- HARGA -->
-                    <input
-                        type="number"
-                        min="0"
-                        :name="`items[${index}][price]`"
-                        placeholder="  Harga"
-                        class="input text-gray-800 dark:text-white/90 bg-transparent"
-                        x-model.number="row.price"
-                        @input="calc()"
-                        required
-                    >
+                    <div class="md:col-span-2">
+                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Harga</label>
+                        <input
+                            type="number"
+                            min="0"
+                            :name="`items[${index}][price]`"
+                            placeholder="Harga"
+                            class="input w-full text-gray-800 dark:text-white/90 bg-white dark:bg-gray-950"
+                            x-model.number="row.price"
+                            @input="calc()"
+                            required
+                        >
+                    </div>
 
                     <!-- SUBTOTAL -->
-                    <div class="text-sm font-semibold text-gray-800 dark:text-gray-400">
+                    <div class="md:col-span-1 text-sm font-semibold text-gray-800 dark:text-gray-400">
+                        <label class="mb-1 block text-xs font-medium text-gray-500 dark:text-gray-400">Subtotal</label>
                         <span x-text="rupiah(row.subtotal)"></span>
                     </div>
 
@@ -134,10 +148,11 @@
                     <button
                         type="button"
                         @click="remove(index)"
-                        class="h-8 w-30 text-sm rounded-md bg-red-500 text-white flex items-center justify-center"
+                        class="md:col-span-1 h-10 rounded-lg bg-red-500 px-3 text-sm text-white hover:bg-red-600"
                     >
-                        Hapus Item
+                        Hapus
                     </button>
+                    </div>
                 </div>
             </template>
 
@@ -177,7 +192,6 @@
                 Simpan Handover
             </x-ui.button>
         </div>
-    </div>
     </form>
 </div>
 
@@ -187,6 +201,7 @@ function handoverForm() {
     return {
         rows: [],
         total: 0,
+        checkSkuUrl: @json(route('warehouse.check-sku')),
 
         generateSku() {
             const letters = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
@@ -216,8 +231,12 @@ function handoverForm() {
                 name: '',
                 quantity: 1,
                 price: 0,
-                subtotal: 0
+                subtotal: 0,
+                skuError: false,
+                checkingSku: false
             })
+
+            this.checkSku(this.rows.length - 1)
         },
 
         remove(index) {
@@ -231,6 +250,31 @@ function handoverForm() {
                 row.subtotal = (row.quantity || 0) * (row.price || 0)
                 this.total += row.subtotal
             })
+        },
+
+        get hasSkuError() {
+            return this.rows.length === 0 || this.rows.some(row => row.skuError || row.checkingSku)
+        },
+
+        async checkSku(index) {
+            const row = this.rows[index]
+
+            if (!row || !row.sku) {
+                return
+            }
+
+            row.checkingSku = true
+
+            try {
+                const params = new URLSearchParams({ sku: row.sku })
+                const response = await fetch(`${this.checkSkuUrl}?${params.toString()}`)
+                const data = await response.json()
+                row.skuError = Boolean(data.exists)
+            } catch (error) {
+                row.skuError = true
+            } finally {
+                row.checkingSku = false
+            }
         },
 
         rupiah(val) {

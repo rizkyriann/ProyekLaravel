@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Handover;
+use App\Models\HandoverItem;
 use App\Models\Item;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -10,7 +11,6 @@ use Illuminate\Support\Facades\DB;
 
 class HandoverController extends Controller
 {
-    // List handover
     public function index()
     {
         $handovers = Handover::with('handoverItems')
@@ -20,7 +20,6 @@ class HandoverController extends Controller
         return view('pages.handovers.index', compact('handovers'));
     }
 
-    // Form tambah handover
     public function create()
     {
         return view('pages.handovers.create', [
@@ -28,86 +27,91 @@ class HandoverController extends Controller
         ]);
     }
 
-    // Simpan handover (STOCK IN)
     public function store(Request $request)
     {
-        DB::transaction(function () use ($request) {
+        $data = $request->validate([
+            'source' => 'required|string|max:150',
+            'handover_date' => 'required|date',
+            'items' => 'required|array|min:1',
+            'items.*.item_name' => 'required|string|max:150',
+            'items.*.sku' => 'required|string|max:50|distinct',
+            'items.*.quantity' => 'required|integer|min:1',
+            'items.*.price' => 'required|numeric|min:0',
+        ]);
 
-            $data = $request->validate([
-                'source' => 'required|string',
-                'handover_date' => 'required|date',
-                'items' => 'required|array|min:1',
-                'items.*.item_name' => 'required|string',
-                'items.*.sku' => 'required|string|distinct',
-                'items.*.quantity' => 'required|integer|min:1',
-                'items.*.price' => 'required|numeric|min:0',
-            ]);
-
-            // CEK SKU SEBELUM INSERT APA PUN
-            foreach ($data['items'] as $item) {
-                if (Item::where('sku', $item['sku'])->exists()) {
-                    throw new \Exception("SKU {$item['sku']} sudah terdaftar");
+        try {
+            DB::transaction(function () use ($data) {
+                foreach ($data['items'] as $item) {
+                    if (Item::where('sku', $item['sku'])->exists() || HandoverItem::where('sku', $item['sku'])->exists()) {
+                        throw new \Exception("SKU {$item['sku']} sudah terdaftar");
+                    }
                 }
-            }
 
-            // HEADER → DRAFT
-            $handover = Handover::create([
-                'handover_no'   => $this->generateHandoverNo(),
-                'source'        => $data['source'],
-                'handover_date' => $data['handover_date'],
-                'status'        => 'draft',
-            ]);
-
-            // DETAIL (DOKUMEN SAJA)
-            foreach ($data['items'] as $itemData) {
-                $handover->handoverItems()->create([
-                    'sku'            => $itemData['sku'],
-                    'item_name'      => $itemData['item_name'],
-                    'quantity'       => $itemData['quantity'],
-                    'price'          => $itemData['price'],
+                $handover = Handover::create([
+                    'handover_no' => $this->generateHandoverNo(),
+                    'source' => $data['source'],
+                    'handover_date' => $data['handover_date'],
+                    'total_items' => count($data['items']),
+                    'status' => 'draft',
                 ]);
-            }
-        });
+
+                foreach ($data['items'] as $itemData) {
+                    $handover->handoverItems()->create([
+                        'sku' => $itemData['sku'],
+                        'item_name' => $itemData['item_name'],
+                        'quantity' => $itemData['quantity'],
+                        'price' => $itemData['price'],
+                    ]);
+                }
+            });
+
+        } catch (\Throwable $e) {
+            return back()
+                ->withInput()
+                ->with('error', $e->getMessage());
+        }
 
         return redirect()
             ->route('warehouse.handovers.index')
             ->with('success', 'Handover draft berhasil dibuat');
     }
 
-    // Fungsi konfirmasi handover (FINAL)
     public function confirm(Handover $handover)
     {
         if ($handover->status !== 'draft') {
             return back()->withErrors('Handover tidak bisa dikonfirmasi');
         }
 
-        DB::transaction(function () use ($handover) {
+        try {
+            DB::transaction(function () use ($handover) {
+                foreach ($handover->handoverItems as $detail) {
+                    if (Item::where('sku', $detail->sku)->exists()) {
+                        throw new \Exception("SKU {$detail->sku} sudah terdaftar");
+                    }
 
-            foreach ($handover->handoverItems as $detail) {
-                if (Item::where('sku', $detail->sku)->exists()) {
-                    throw new \Exception("SKU {$detail->sku} sudah terdaftar");
+                    Item::create([
+                        'handover_id' => $handover->id,
+                        'handover_item_id' => $detail->id,
+                        'sku' => $detail->sku,
+                        'name' => $detail->item_name,
+                        'quantity' => $detail->quantity,
+                        'price' => $detail->price,
+                        'status' => 'active',
+                    ]);
                 }
-                
-                Item::create([
-                    'handover_id'      => $handover->id,
-                    'handover_item_id' => $detail->id,
-                    'sku'              => $detail->sku,
-                    'name'             => $detail->item_name,
-                    'quantity'         => $detail->quantity,
-                    'price'            => $detail->price,
-                    'status'           => 'active',
-                ]);
-            }
 
-            $handover->update([
-                'status' => 'confirmed'
-            ]);
-        });
+                $handover->update([
+                    'status' => 'confirmed'
+                ]);
+            });
+
+        } catch (\Throwable $e) {
+            return back()->with('error', $e->getMessage());
+        }
 
         return back()->with('success', 'Handover berhasil dikonfirmasi');
     }
 
-    // Ubah status cancel
     public function cancel(Handover $handover)
     {
         if ($handover->status === 'cancelled') {
@@ -115,8 +119,6 @@ class HandoverController extends Controller
         }
 
         DB::transaction(function () use ($handover) {
-
-            // rollback stok JIKA sudah confirm
             if ($handover->status === 'confirmed') {
                 Item::where('handover_id', $handover->id)->delete();
             }
@@ -129,7 +131,6 @@ class HandoverController extends Controller
         return back()->with('success', 'Handover berhasil dibatalkan');
     }
 
-    // Detail handover
     public function show(Handover $handover)
     {
         $handover->load([
@@ -140,28 +141,35 @@ class HandoverController extends Controller
         return view('pages.handovers.show', compact('handover'));
     }
 
-    // Edit handover (biasanya jarang dipakai)
     public function edit(Handover $handover)
     {
         return view('pages.handovers.edit', compact('handover'));
     }
 
-    // Update handover (HEADER ONLY)
     public function update(Request $request, Handover $handover)
     {
-        $handover->update([
-            'source'        => $request->source,
-            'handover_date' => $request->handover_date,
+        $data = $request->validate([
+            'source' => 'required|string|max:150',
+            'handover_date' => 'required|date',
         ]);
+
+        $handover->update($data);
 
         return redirect()
             ->route('warehouse.handovers.index')
             ->with('success', 'Handover berhasil diupdate');
     }
 
-    // Hapus handover (soft delete disarankan)
     public function destroy(Handover $handover)
     {
+        if ($handover->status === 'confirmed') {
+            return back()->with('error', 'Handover confirmed harus dibatalkan dulu sebelum dihapus');
+        }
+
+        if ($handover->status === 'draft') {
+            $handover->handoverItems()->delete();
+        }
+
         $handover->delete();
 
         return redirect()
@@ -183,21 +191,4 @@ class HandoverController extends Controller
 
         return "HO-$date-" . str_pad($number, 4, '0', STR_PAD_LEFT);
     }
-
-    private function generateSkuSimple()
-    {
-        do {
-            // 3 huruf A–Z
-            $letters = strtoupper(substr(str_shuffle('ABCDEFGHIJKLMNOPQRSTUVWXYZ'), 0, 3));
-
-            // 3 angka 0–9
-            $numbers = str_pad(rand(0, 999), 3, '0', STR_PAD_LEFT);
-
-            $sku = $letters . '-' . $numbers;
-
-        } while (Item::where('sku', $sku)->exists());
-
-        return $sku;
-    }
-
 }

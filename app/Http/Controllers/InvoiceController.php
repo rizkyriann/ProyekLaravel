@@ -18,7 +18,7 @@ class InvoiceController extends Controller
      */
     public function index()
     {
-        $invoices = Invoice::latest()->get();
+        $invoices = Invoice::withCount('items')->latest()->get();
         return view('pages.invoices.index', compact('invoices'));
     }
 
@@ -44,22 +44,22 @@ class InvoiceController extends Controller
         // ======================
         // VALIDASI REQUEST
         // ======================
-        $request->validate([
+        $data = $request->validate([
             'date'              => 'required|date',
-            'customer'          => 'required|string',
+            'customer'          => 'required|string|max:150',
             'items'             => 'required|array|min:1',
             'items.*.item_id'   => 'required|exists:items,id',
-            'items.*.price'     => 'required|numeric|min:0',
             'items.*.quantity'  => 'required|integer|min:1',
         ]);
 
         try {
-            DB::transaction(function () use ($request) {
+            DB::transaction(function () use ($data) {
+                $total = 0;
 
                 // ======================
                 // VALIDASI STOK (LOCK)
                 // ======================
-                foreach ($request->items as $row) {
+                foreach ($data['items'] as $row) {
                     $item = Item::lockForUpdate()->findOrFail($row['item_id']);
 
                     if ($item->quantity < $row['quantity']) {
@@ -67,6 +67,8 @@ class InvoiceController extends Controller
                             "Stok {$item->name} tidak mencukupi"
                         );
                     }
+
+                    $total += $row['quantity'] * $item->price;
                 }
 
                 // ======================
@@ -74,16 +76,16 @@ class InvoiceController extends Controller
                 // ======================
                 $invoice = Invoice::create([
                     'invoice_no'    => $this->generateInvoiceNo(),
-                    'date'          => $request->date,
-                    'customer'      => $request->customer,
-                    'total'         => $request->total,
+                    'date'          => $data['date'],
+                    'customer'      => $data['customer'],
+                    'total'         => $total,
                     'status'        => 'draft',
                 ]);
 
                 // ======================
                 // SIMPAN ITEM + KURANGI STOK
                 // ======================
-                foreach ($request->items as $row) {
+                foreach ($data['items'] as $row) {
                     $item = Item::lockForUpdate()->findOrFail($row['item_id']);
 
                     InvoiceItem::create([
@@ -135,7 +137,6 @@ class InvoiceController extends Controller
 
                 $invoice->update([
                     'status' => 'paid',
-                    'paid_at' => now(),
                 ]);
             });
 
@@ -165,10 +166,14 @@ class InvoiceController extends Controller
             return back()->with('error', 'Invoice sudah dibatalkan');
         }
 
+        $wasPaid = $invoice->status === 'paid';
+
         try {
             DB::transaction(function () use ($invoice) {
-                foreach ($invoice->items as $row) {
-                    $row->item->increment('quantity', $row->quantity);
+                if ($invoice->status === 'paid') {
+                    foreach ($invoice->items as $row) {
+                        $row->item->increment('quantity', $row->quantity);
+                    }
                 }
 
                 $invoice->update([
@@ -176,7 +181,11 @@ class InvoiceController extends Controller
                 ]);
             });
 
-            return back()->with('success', 'Invoice dibatalkan dan stok dikembalikan');
+            $message = $wasPaid
+                ? 'Invoice dibatalkan dan stok dikembalikan'
+                : 'Invoice draft berhasil dibatalkan';
+
+            return back()->with('success', $message);
 
         } catch (\Throwable $e) {
             return back()->with('error', $e->getMessage());

@@ -10,6 +10,11 @@
         </h2>
 
         <div class="flex gap-2">
+            <a href="{{ route('warehouse.invoices.index') }}"
+               class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800">
+                Kembali
+            </a>
+
             @if ($invoice->status === 'paid')
                 <form method="POST" action="{{ route('warehouse.invoices.cancel', $invoice) }}">
                     @csrf
@@ -29,7 +34,7 @@
                     @method('PUT')
                     <button
                         class="inline-flex items-center rounded-lg bg-success px-4 py-2 text-sm font-medium text-white hover:bg-success/90">
-                        ✔ Konfirmasi / Paid
+                        Konfirmasi / Paid
                     </button>
                 </form>
             @endif
@@ -37,7 +42,7 @@
     </div>
 
     {{-- INFO CARD --}}
-    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-3">
+    <div class="mb-6 grid grid-cols-1 gap-4 md:grid-cols-4">
 
         <div class="rounded-xl border border-stroke bg-gray-50 p-4
                     dark:border-strokedark dark:bg-boxdark">
@@ -59,7 +64,15 @@
                     dark:border-strokedark dark:bg-boxdark">
             <p class="text-sm text-gray-600 dark:text-gray-400">Tanggal</p>
             <p class="font-semibold text-gray-900 dark:text-white">
-                {{ \Carbon\Carbon::parse($invoice->invoice_date)->format('d-m-Y') }}
+                {{ \Carbon\Carbon::parse($invoice->date)->format('d-m-Y') }}
+            </p>
+        </div>
+
+        <div class="rounded-xl border border-stroke bg-gray-50 p-4
+                    dark:border-strokedark dark:bg-boxdark">
+            <p class="text-sm text-gray-600 dark:text-gray-400">Status</p>
+            <p class="font-semibold text-gray-900 dark:text-white">
+                {{ strtoupper($invoice->status) }}
             </p>
         </div>
 
@@ -113,6 +126,17 @@
                         </tr>
                     @endforeach
                 </tbody>
+
+                <tfoot>
+                    <tr>
+                        <td colspan="3" class="px-4 py-4 text-right text-sm font-semibold text-gray-700 dark:text-gray-300">
+                            Total
+                        </td>
+                        <td class="px-4 py-4 text-sm font-bold text-gray-900 dark:text-white">
+                            Rp {{ number_format($invoice->total, 0, ',', '.') }}
+                        </td>
+                    </tr>
+                </tfoot>
 
             </table>
         </div>

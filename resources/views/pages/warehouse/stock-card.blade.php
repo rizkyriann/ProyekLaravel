@@ -31,26 +31,26 @@
             <tbody>
 
                 {{-- Barang Masuk (Handover) --}}
-                @foreach ($item->handoverItems as $row)
+                @if ($item->handoverItem)
                     <tr class="border-t dark:border-gray-800">
                         <td class="px-5 py-4 text-sm">
-                            {{ optional($row->handover)->handover_date }}
+                            {{ optional($item->handoverItem->handover)->handover_date }}
                         </td>
                         <td class="px-5 py-4 text-sm">
                             Barang Masuk (Handover)
                         </td>
                         <td class="px-5 py-4 text-right text-sm font-semibold text-green-600">
-                            {{ $row->quantity }}
+                            {{ $item->handoverItem->quantity }}
                         </td>
                         <td class="px-5 py-4 text-right text-sm">-</td>
                     </tr>
-                @endforeach
+                @endif
 
                 {{-- Barang Keluar (Invoice) --}}
                 @foreach ($item->invoiceItems as $row)
                     <tr class="border-t dark:border-gray-800">
                         <td class="px-5 py-4 text-sm">
-                            {{ optional($row->invoice)->invoice_date }}
+                            {{ optional($row->invoice)->date }}
                         </td>
                         <td class="px-5 py-4 text-sm">
                             Barang Keluar (Invoice)

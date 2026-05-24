@@ -35,17 +35,17 @@
 
             <div>
                 <p class="text-sm text-gray-500">Tanggal Masuk</p>
-                <p class="font-semibold dark:text-gray-400">{{ $item->handover->handover_date }}</p>
+                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->handover_date ?? '-' }}</p>
             </div>
 
             <div>
                 <p class="text-sm text-gray-500">Nama Supplier</p>
-                <p class="font-semibold dark:text-gray-400">{{ $item->handover->source }}</p>
+                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->source ?? '-' }}</p>
             </div>
 
             <div>
                 <p class="text-sm text-gray-500">Nomor Handover</p>
-                <p class="font-semibold dark:text-gray-400">{{ $item->handover->handover_no }}</p>
+                <p class="font-semibold dark:text-gray-400">{{ optional($item->handover)->handover_no ?? '-' }}</p>
             </div>
 
             <div>

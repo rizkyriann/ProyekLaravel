@@ -88,16 +88,21 @@ Route::middleware(['auth', 'role:admin,superadmin'])
         Route::delete('handovers/{handover}', [HandoverController::class, 'destroy'])
             ->name('handovers.destroy');
 
-        Route::get('/warehouse/check-sku', function (Request $request) {
+        Route::get('check-sku', function (Request $request) {
+            $request->validate([
+                'sku' => 'required|string|max:50',
+            ]);
+
             return response()->json([
                 'exists' => \App\Models\Item::where('sku', $request->sku)->exists()
+                    || \App\Models\HandoverItem::where('sku', $request->sku)->exists()
             ]);
-        })->name('warehouse.check-sku');
+        })->name('check-sku');
 
-        Route::post('{handover}/confirm', [HandoverController::class, 'confirm'])
+        Route::post('handovers/{handover}/confirm', [HandoverController::class, 'confirm'])
             ->name('handovers.confirm');
 
-        Route::post('{handover}/cancel', [HandoverController::class, 'cancel'])
+        Route::post('handovers/{handover}/cancel', [HandoverController::class, 'cancel'])
             ->name('handovers.cancel');
     });
 
